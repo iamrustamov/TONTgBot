@@ -55,7 +55,7 @@ $ systemctl restart tontgbot.service
 If you will restart validator node from bot, tontgbot service will be it's parrent, and if you stop tontgbot, you will need to run node again from terminal. I will think about deattaching run node pid from tontgbot service after restart
 
 ## What to do if something not working?
-Find in bot.py telebot.logger.setLevel(logging.ERROR) and change ERROR to DEBUG and execute
+Find in bot.py telebot.logger.setLevel(logging.ERROR) and change ERROR to DEBUG, restart tontgbot service and execute
   ```sh
 $ journalctl -e -u tontgbot > /opt/tontgbot/servicelog.log
 ```
