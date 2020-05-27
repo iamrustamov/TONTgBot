@@ -22,3 +22,31 @@ $ systemctl restart tontgbot.service
   ```sh
 $ systemctl enable tontgbot.service 
 ```
+## Available languages *Yes, with google translate
+Change languages=['en'] in bot.py to language, what you need
+  ```sh
+lang_translations = gettext.translation('base', localedir='/opt/tontgbot/locales', languages=['en'])
+```
+
+Language - code
+* English - en
+* Español - es
+* Français - fr
+* Dansk - da
+* Nederlands - nl
+* हिंदी - hi
+* Italiano - it
+* Polski - pl
+* Português - pt
+* Suomi - fi
+* Svenska - sv
+* Türkçe - tr
+* Ελληνικά - el
+* Русский - ru
+* Українська - uk
+* 日本語 - ja
+
+And restart your bot
+  ```sh
+$ systemctl restart tontgbot.service 
+```
