@@ -1,0 +1,13 @@
+#!/bin/bash
+
+[Unit]
+Description=TONTgBot
+After=syslog.target
+
+[Service]
+Type=simple
+ExecStart=/etc/init.d/tontgbot start
+ExecStop=/etc/init.d/tontgbot stop
+
+[Install]
+WantedBy=multi-user.target
