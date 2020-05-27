@@ -8,7 +8,7 @@ Tested on ubuntu 18.04 & python 3.6.8 (To check your python version, put to the 
 ```sh
 $ git clone -v https://github.com/anvme/TONTgBot.git /opt/tontgbot && cd /opt/tontgbot && chmod +x installbot.sh
 ```
- 3. Open /opt/tontgbot/bot.py in any editor and change values in TONTgBot from *Edit starts here* till *Edit ends here*. If you dont know your id, you can get it with this bot after it first start. Just send him /id command
+ 3. Open /opt/tontgbot/bot.py in any editor and change values in TONTgBot from *Edit starts here* till *Edit ends here*. If you dont know your id(tg value) insert there 1 and go to next step. You can get it with this bot after it first start from step 4. Just send him /id command
  4. Run 
  ```sh
 $ /bin/bash /opt/tontgbot/installsbot.sh
