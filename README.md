@@ -50,3 +50,6 @@ And restart your bot
   ```sh
 $ systemctl restart tontgbot.service 
 ```
+
+## Restart validator node
+If you will restart validator node from bot, tontgbot service will be it's parrent, and if you stop tontgbot, you will need to run node again from terminal. I will think about deattaching run node pid from tontgbot service after restart
