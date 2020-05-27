@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os, sys
+import config
 import time
 import datetime
 import subprocess
@@ -18,37 +19,22 @@ import gettext
 
 # ##### TONTgBot
 
-# ----- Edit starts here
 # API Token
-bot = telebot.TeleBot("xxxxx:yyyyyyy")
+bot = telebot.TeleBot(config.TgBotAPIKey)
 # /API Token
 
-tg = "1111111" # Your id, you can get it by sending to this bot /id command.
-ud = "/opt/net.ton.dev/ton/build/utils" # UTILS_DIR | You can easy get it from $ env command. Be sure, before this command you run env.sh
-tk = "/root/ton-keys/" # KEYS_DIR | You can easy get it from $ env command. Be sure, before this command you run env.sh
-tf = "/opt/net.ton.dev/" # NET_TON_DEV_SRC_TOP_DIR | You can easy get it from $ env command. Be sure, before this command you run env.sh
-
-# /----- Edit ends here
-
-
-elogc = "250" # Row count for the error log
-slogc = "250" # Row count for the slow log
-srvping = "1.1.1.1" # Ping test server
-vu = "https://net.ton.live/validators?section=details&public_key="
-tw = "/var/ton-work" # TON work dir
-tontgpath = "/opt/tontgbot" # Folder with this bot. Do not edit!
 # ##### TONTgBot
 
 lang_translations = gettext.translation('base', localedir='/opt/tontgbot/locales', languages=['en'])
 lang_translations.install()
 _ = lang_translations.gettext
 
-dotenv_path = (os.path.join(tf, "script/env.sh"))
+dotenv_path = (os.path.join(config.tf, "script/env.sh"))
 load_dotenv(dotenv_path)
 
 # Log
 logger = telebot.logger
-telebot.logger.setLevel(logging.ERROR) # Outputs Error messages to console.
+telebot.logger.setLevel(logging.DEBUG) # Outputs Error messages to console.
 # /Log
 
 # Menu vars
@@ -240,7 +226,7 @@ def get_id(i):
 # Start
 @bot.message_handler(commands=["start", "help"])
 def send_welcome(message):
-  bot.send_message(tg, _("Hello") + "\U0001F44B\n" + _("I'm here to help you with your TON Validatior server ") + " \U0001F9BE\n" + _("Let's choose what you want?"),reply_markup=markup)
+  bot.send_message(config.tg, _("Hello") + "\U0001F44B\n" + _("I'm here to help you with your TON Validatior server ") + " \U0001F9BE\n" + _("Let's choose what you want?"),reply_markup=markup)
 # /Start
 
 # CPU
@@ -250,9 +236,9 @@ def command_cpu(message):
     sysload = str(psutil.getloadavg())
     cpuutil = str(psutil.cpu_percent(percpu=True))
     cpu = _("*System load (1,5,15 min):* _") + sysload + _("_\n*CPU utilization %:* _") + cpuutil + "_"
-    bot.send_message(tg, text=cpu, parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=cpu, parse_mode="Markdown", reply_markup=markup)
   except:
-    bot.send_message(tg, text=_("Can't get CPU info"), parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=_("Can't get CPU info"), parse_mode="Markdown", reply_markup=markup)
 # /CPU
 
 # RAM
@@ -261,9 +247,9 @@ def command_ram(message):
   try:
     ram = _("*RAM, Gb.*\n_Total: ") + str(subprocess.check_output(["free -mh | grep Mem | awk '{print $2}'"], shell = True,encoding='utf-8')) + _("Available: ") + str(subprocess.check_output(["free -mh | grep Mem | awk '{print $7}'"], shell = True,encoding='utf-8')) + _("Used: ") + str(subprocess.check_output(["free -mh | grep Mem | awk '{print $3}'"], shell = True,encoding='utf-8')) + "_"
     swap = _("*SWAP, Gb.*\n_Total: ") + str(subprocess.check_output(["free -mh | grep Swap | awk '{print $2}'"], shell = True,encoding='utf-8')) + _("Available: ") + str(subprocess.check_output(["free -mh | grep Swap | awk '{print $7}'"], shell = True,encoding='utf-8')) + _("Used: ") + str(subprocess.check_output(["free -mh | grep Swap | awk '{print $3}'"], shell = True,encoding='utf-8')) + "_"
-    bot.send_message(tg, text=ram + swap, parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=ram + swap, parse_mode="Markdown", reply_markup=markup)
   except:
-    bot.send_message(tg, text=_("Can't get RAM info"), parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=_("Can't get RAM info"), parse_mode="Markdown", reply_markup=markup)
 # /RAM
 
 # Disk
@@ -271,15 +257,15 @@ def command_ram(message):
 def command_disk(message):
   try:
     disk = str(subprocess.check_output(["df -h -t ext4"], shell = True,encoding='utf-8'))
-    dbsize = str(subprocess.check_output(["du -msh " + tw + "/db/files/ | awk '{print $1}'"], shell = True,encoding='utf-8'))
-    archsize = str(subprocess.check_output(["du -msh " + tw + "/db/archive/ | awk '{print $1}'"], shell = True,encoding='utf-8'))
-    nodelog = str(subprocess.check_output(["du -msh " + tw + "/node.log | awk '{print $1}'"], shell = True,encoding='utf-8'))
+    dbsize = str(subprocess.check_output(["du -msh " + config.tw + "/db/files/ | awk '{print $1}'"], shell = True,encoding='utf-8'))
+    archsize = str(subprocess.check_output(["du -msh " + config.tw + "/db/archive/ | awk '{print $1}'"], shell = True,encoding='utf-8'))
+    nodelog = str(subprocess.check_output(["du -msh " + config.tw + "/node.log | awk '{print $1}'"], shell = True,encoding='utf-8'))
     dbsize = _("*Database size:* _") + dbsize + "_"
     archsize = _("*Archive size:* _") + archsize + "_" 
     nodelog = _("*Node.log size:* _") + nodelog + "_"
-    bot.send_message(tg, text=archsize + dbsize + nodelog + disk, parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=archsize + dbsize + nodelog + disk, parse_mode="Markdown", reply_markup=markup)
   except:
-    bot.send_message(tg, text=_("Can't get disk info"), parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=_("Can't get disk info"), parse_mode="Markdown", reply_markup=markup)
 # /Disk
 
 
@@ -289,7 +275,7 @@ def command_disk(message):
 # Validator tools start
 @bot.message_handler(func=lambda message: message.text == lt_validatortools)
 def command_linuxtools(message):
-  bot.send_message(tg, text="\U0001F48E " + _("You are welcome") + " \U0001F48E", reply_markup=markupValidator)
+  bot.send_message(config.tg, text="\U0001F48E " + _("You are welcome") + " \U0001F48E", reply_markup=markupValidator)
 # /Validator tools start
 
 
@@ -297,15 +283,15 @@ def command_linuxtools(message):
 @bot.message_handler(func=lambda message: message.text == lt_tonwalletbal)
 def command_wallbal(message):
   try:
-    wlt = "head -1 " + tk + "*.addr"
+    wlt = "head -1 " + config.tk + "*.addr"
     wlt = str(subprocess.check_output(wlt, shell = True,encoding='utf-8').rstrip())
-    acctoncli = ud + "/tonos-cli account " + wlt + " | grep -i 'balance' | awk '{print $2}'"
+    acctoncli = config.ud + "/tonos-cli account " + wlt + " | grep -i 'balance' | awk '{print $2}'"
     acctoncli = str(subprocess.check_output(acctoncli, shell = True,encoding='utf-8'))
     acctonclibal = str(int(acctoncli) / 1000000000)
     acctonclibal = _("Balance: ") + acctonclibal + " \U0001F48E"
-    bot.send_message(tg, text=acctonclibal, reply_markup=markupValidator)
+    bot.send_message(config.tg, text=acctonclibal, reply_markup=markupValidator)
   except:
-    bot.send_message(tg, text=_("Can't get wallet balance"), reply_markup=markupValidator)
+    bot.send_message(config.tg, text=_("Can't get wallet balance"), reply_markup=markupValidator)
 # /Wallet balance
 
 # Time Diff
@@ -315,40 +301,44 @@ def command_timediff(message):
     master, slave = pty.openpty()
     stdout = None
     stderr = None
-    timediffcmd = tf + "scripts/check_node_sync_status.sh | grep TIME_DIFF | awk '{print $4}'"
+    timediffcmd = config.tf + "scripts/check_node_sync_status.sh | grep TIME_DIFF | awk '{print $4}'"
     timediff = subprocess.Popen(timediffcmd, stdin=slave, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, encoding='utf-8', close_fds=True)
     outs, errs = timediff.communicate(timeout=2)
     os.close(slave)
     os.close(master)
-    bot.send_message(tg, text=_("Time Diff is ") + outs, reply_markup=markupValidator)
+    bot.send_message(config.tg, text=_("Time Diff is ") + outs, reply_markup=markupValidator)
   except:
-    timediff.kill()
-    bot.send_message(tg, text=_("Time Diff check failed"), reply_markup=markupValidator)
+    kill(timediff.pid)
+    os.close(slave)
+    os.close(master)
+    bot.send_message(config.tg, text=_("Time Diff check failed"), reply_markup=markupValidator)
 # /Time Diff
 
 # Election adnl key
 @bot.message_handler(func=lambda message: message.text == lt_eadnlkey)
 def command_adnlkey(message):
   try:
-    eladnlkey = "cat " + tk + "elections/*-election-adnl-key | grep 'new key' | awk '{print $4}'"
-    validator_key = "grep -rn " + tk + "elections/ -e 'validator public key' | awk '{print $NF}'"
+    eladnlkey = "cat " + config.tk + "elections/*-election-adnl-key | grep 'new key' | awk '{print $4}'"
+    validator_key = "grep -rn " + config.tk + "elections/ -e 'validator public key' | awk '{print $NF}'"
     eladnlkey = str(subprocess.check_output(eladnlkey, shell = True,encoding='utf-8').rstrip())  
-    validator_details = vu + str(subprocess.check_output(validator_key, shell = True,encoding='utf-8').rstrip())
-    adnllstlch = os.popen("tail -n 1 " + tontgpath + "/db/adnlkeys.dat").read().rstrip()
+    validator_details = config.vu + str(subprocess.check_output(validator_key, shell = True,encoding='utf-8').rstrip())
+    if not os.path.exists(os.path.join(config.tontgpath, "db/adnlkeys.dat")):
+      os.mknod(os.path.join(config.tontgpath, "db/adnlkeys.dat"))
+    adnllstlch = os.popen("tail -n 1 " + config.tontgpath + "/db/adnlkeys.dat").read().rstrip()
     adnlnwline = eladnlkey + ";" + validator_details
     if str(adnllstlch) == str(adnlnwline):
       pass
     else:
-      with open(os.path.join(tontgpath, "db/adnlkeys.dat"), "a") as i:
+      with open(os.path.join(config.tontgpath, "db/adnlkeys.dat"), "a") as i:
         i.write(eladnlkey + ";" + validator_details + "\n")
         i.close()
-    adnlold = os.popen("tail -n 2 " + tontgpath + "/db/adnlkeys.dat | head -n 1").read().strip()
-    adnlnow = os.popen("tail -n 1 " + tontgpath + "/db/adnlkeys.dat").read().strip()
+    adnlold = os.popen("tail -n 2 " + config.tontgpath + "/db/adnlkeys.dat | head -n 1").read().strip()
+    adnlnow = os.popen("tail -n 1 " + config.tontgpath + "/db/adnlkeys.dat").read().strip()
     if str(adnlnow) == str(adnlold):
       adnlkeyboard = types.InlineKeyboardMarkup()
       url_button = types.InlineKeyboardButton(text=_("Validator details"), url=validator_details)
       adnlkeyboard.add(url_button)
-      bot.send_message(tg, text=eladnlkey, reply_markup=adnlkeyboard)
+      bot.send_message(config.tg, text=eladnlkey, reply_markup=adnlkeyboard)
     else:
       adnlold = adnlold.split(";")
       adnlnow = adnlnow.split(";")
@@ -361,35 +351,35 @@ def command_adnlkey(message):
       adnlkeyboard.add(url_button_old)
       url_button_new = types.InlineKeyboardButton(text= "\U0001F517" + _("Validator details. New adnl key"), url=adnlnowu)
       adnlkeyboard.add(url_button_new)
-      bot.send_message(tg, text=_("Old adnl key ") + adnloldk + "\n" + _("New adnl key ") + adnlnowk, reply_markup=adnlkeyboard)
+      bot.send_message(config.tg, text=_("Old adnl key ") + adnloldk + "\n" + _("New adnl key ") + adnlnowk, reply_markup=adnlkeyboard)
   except:
-    bot.send_message(tg, text=_("Can't get adnl key "))
+    bot.send_message(config.tg, text=_("Can't get adnl key "))
 # /Election adnl key
 
 # Error logs
 @bot.message_handler(func=lambda message: message.text == lt_errorsinlogs)
 def command_errlog(message):
   try:
-    #errorlog = "tac " + tw + "/node.log | grep -n -m 25 -i 'error' > /tmp/node_error.log"
-    errorlog = "egrep -n -i 'fail|error' " + tw + "/node.log | tail -n " + elogc + " > /tmp/node_error.log"
+    #errorlog = "tac " + config.tw + "/node.log | grep -n -m 25 -i 'error' > /tmp/node_error.log"
+    errorlog = "egrep -n -i 'fail|error' " + config.tw + "/node.log | tail -n " + config.elogc + " > /tmp/node_error.log"
     errorlogf = str(subprocess.call(errorlog, shell = True,encoding='utf-8'))
     errfile = open('/tmp/node_error.log', 'rb')
-    bot.send_document(tg, errfile, reply_markup=markupValidator)
+    bot.send_document(config.tg, errfile, reply_markup=markupValidator)
   except:
-    bot.send_document(tg, text = _("Can't get error log"), reply_markup=markupValidator)
+    bot.send_document(config.tg, text = _("Can't get error log"), reply_markup=markupValidator)
 # /Error logs
 
 # Slow logs
 @bot.message_handler(func=lambda message: message.text == lt_slowinlogs)
 def command_slowlog(message):
   try:
-    #slowlog = "tac " + tw + "/node.log | grep -n -m 25 -i 'error' > /tmp/node_slow.log"
-    slowlog = "grep -n -i 'slow' " + tw + "/node.log | tail -n " + slogc + " > /tmp/node_slow.log"
+    #slowlog = "tac " + config.tw + "/node.log | grep -n -m 25 -i 'error' > /tmp/node_slow.log"
+    slowlog = "grep -n -i 'slow' " + config.tw + "/node.log | tail -n " + config.slogc + " > /tmp/node_slow.log"
     slowlogf = str(subprocess.call(slowlog, shell = True,encoding='utf-8'))
     slwfile = open('/tmp/node_slow.log', 'rb')
-    bot.send_document(tg, slwfile, reply_markup=markupValidator)
+    bot.send_document(config.tg, slwfile, reply_markup=markupValidator)
   except:
-    bot.send_document(tg, text = _("Can't get slow log"), reply_markup=markupValidator)
+    bot.send_document(config.tg, text = _("Can't get slow log"), reply_markup=markupValidator)
 # /Slow logs
 
 
@@ -401,72 +391,72 @@ def restartvalidnod(call):
       dorestart = types.InlineKeyboardMarkup()
       dorestart_reply = types.InlineKeyboardButton(text=_("Starting restart process for Validator node"),callback_data="do_restart")
       dorestart.add(dorestart_reply) 
-      bot.edit_message_reply_markup(tg, message_id=call.message.message_id, reply_markup=dorestart)
-      bot.send_chat_action(tg, "typing")
-      nodelogbr = str(subprocess.check_output(["du -msh " + tw + "/node.log | awk '{print $1}'"], shell = True,encoding='utf-8'))
+      bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=dorestart)
+      bot.send_chat_action(config.tg, "typing")
+      nodelogbr = str(subprocess.check_output(["du -msh " + config.tw + "/node.log | awk '{print $1}'"], shell = True,encoding='utf-8'))
       nodelogbr = _("*Node.log size before restart :* _") + nodelogbr + "_"
-      bot.send_message(tg, text = nodelogbr, parse_mode="Markdown")
-      bot.send_chat_action(tg, "typing")
+      bot.send_message(config.tg, text = nodelogbr, parse_mode="Markdown")
+      bot.send_chat_action(config.tg, "typing")
       killvproc = "ps -eo pid,cmd | grep -i 'validator-engine' | grep -iv 'grep' | awk '{print $1}' | xargs kill -9 $1"
-      runvproc = tf + "scripts/run.sh"
+      runvproc = config.tf + "scripts/run.sh"
       killvproc = str(subprocess.call(killvproc, shell = True,encoding='utf-8'))
-      bot.send_message(tg, text = _("Node stopped. RAM & node.log clean. Starting node"), reply_markup=markupValidator)
-      bot.send_chat_action(tg, "typing")
+      bot.send_message(config.tg, text = _("Node stopped. RAM & node.log clean. Starting node"), reply_markup=markupValidator)
+      bot.send_chat_action(config.tg, "typing")
       time.sleep(3)
       runvproc = str(subprocess.check_output(runvproc, shell = True,preexec_fn=os.setsid,encoding='utf-8'))
-      bot.send_message(tg, text = runvproc, reply_markup=markupValidator)
+      bot.send_message(config.tg, text = runvproc, reply_markup=markupValidator)
     except:
-      bot.send_message(tg, text = _("Restart error. Try to restart your node manually"), reply_markup=markupValidator)
+      bot.send_message(config.tg, text = _("Restart error. Try to restart your node manually"), reply_markup=markupValidator)
   elif call.data == "nores":
     norestart = types.InlineKeyboardMarkup()
     norestart_reply = types.InlineKeyboardButton(text=_("Declined"),callback_data="no_exit")
     norestart.add(norestart_reply) 
-    bot.edit_message_reply_markup(tg, message_id=call.message.message_id, reply_markup=norestart) 
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=norestart) 
 @bot.message_handler(func=lambda message: message.text == lt_restartvalidnodee)
 
 # Restart validator node
 def command_restartvalidator(message):
   try:
-    bot.send_chat_action(tg, "typing")
+    bot.send_chat_action(config.tg, "typing")
     restartkbd = types.InlineKeyboardMarkup()
     restartvalidnod_1 = types.InlineKeyboardButton(text=_("Restart node"), callback_data="res")
     restartkbd.add(restartvalidnod_1)
     restartvalidnod_0 = types.InlineKeyboardButton(text=_("Don't restart the node"), callback_data="nores")
     restartkbd.add(restartvalidnod_0)
-    bot.send_message(tg, text = _("Do you really want to restart validator node?"), reply_markup=restartkbd)
+    bot.send_message(config.tg, text = _("Do you really want to restart validator node?"), reply_markup=restartkbd)
   except:
-    bot.send_message(tg, text = _("Restart error"))
+    bot.send_message(config.tg, text = _("Restart error"))
 # /Restart validator node
 
 # Current stake
 @bot.message_handler(func=lambda message: message.text == lt_currentstake)
 def command_currentstake(message):
   try:
-    bot.send_chat_action(tg, "typing")
+    bot.send_chat_action(config.tg, "typing")
     currentstake = "crontab -l | grep -oP 'validator_msig.sh ([0-9]+)' | awk '{print $2}'"
     currentstake = str(subprocess.check_output(currentstake, shell = True,encoding='utf-8').rstrip())
-    bot.send_message(tg, text = _("Your current stake is ") + currentstake + " \U0001F48E", reply_markup=markupValidator)
+    bot.send_message(config.tg, text = _("Your current stake is ") + currentstake + " \U0001F48E", reply_markup=markupValidator)
   except:
-    bot.send_message(tg, text = _("Can't get current stake"), reply_markup=markupValidator)
-# /Current stake
+    bot.send_message(config.tg, text = _("Can't get current stake"), reply_markup=markupValidator)
+# /Current stake 
 
 # Update stake
 @bot.message_handler(func=lambda message: message.text == lt_updatestake)
 def command_updatestake(message):
   try:
-    bot.send_chat_action(tg, "typing")
+    bot.send_chat_action(config.tg, "typing")
     uddatestake = "crontab -l | grep -oP 'validator_msig.sh ([0-9]+)' | awk '{print $2}'"
     uddatestake = str(subprocess.check_output(uddatestake, shell = True,encoding='utf-8').rstrip())
-    bot.send_message(tg, text = _("Your current stake ") + uddatestake + " \U0001F48E \n" + _("To update your current stake, please send me command /updstake 10001, where 10001 is your new stake "), reply_markup=markupValidator)
+    bot.send_message(config.tg, text = _("Your current stake ") + uddatestake + " \U0001F48E \n" + _("To update your current stake, please send me command /updstake 10001, where 10001 is your new stake "), reply_markup=markupValidator)
   except:
-    bot.send_message(tg, text = _("Update stake command error"), reply_markup=markupValidator)
+    bot.send_message(config.tg, text = _("Update stake command error"), reply_markup=markupValidator)
 # /Update stake
 
 # Update stake command
 @bot.message_handler(commands=["updstake"])
 def send_welcome(message):
   try:
-    bot.send_chat_action(tg, "typing")
+    bot.send_chat_action(config.tg, "typing")
     stakesize = message.text.split()
     stakesize = str(int(stakesize[1]))
     updatestakecmd = "crontab -l | sed 's/validator_msig.sh \([0-9]\+\)/validator_msig.sh " + stakesize + "/' | crontab -"
@@ -474,13 +464,13 @@ def send_welcome(message):
     time.sleep(1)
     currentstake = "crontab -l | grep -oP 'validator_msig.sh ([0-9]+)' | awk '{print $2}'"
     currentstake = str(subprocess.check_output(currentstake, shell = True,encoding='utf-8').rstrip())
-    bot.send_message(tg, text = _("Your NEW stake: ") + currentstake + " \U0001F48E", reply_markup=markupValidator)
+    bot.send_message(config.tg, text = _("Your NEW stake: ") + currentstake + " \U0001F48E", reply_markup=markupValidator)
   except:
     try:
       currentstake = "crontab -l | grep -oP 'validator_msig.sh ([0-9]+)' | awk '{print $2}'"
-      bot.send_message(tg, text = _("Update ERROR. Your current stake is ") + currentstake + " \U0001F48E", reply_markup=markupValidator)
+      bot.send_message(config.tg, text = _("Update ERROR. Your current stake is ") + currentstake + " \U0001F48E", reply_markup=markupValidator)
     except:
-      bot.send_message(tg, text = _("Update ERROR"), reply_markup=markupValidator)
+      bot.send_message(config.tg, text = _("Update ERROR"), reply_markup=markupValidator)
 # /Update stake command
 
 # /Validator tools 
@@ -493,7 +483,7 @@ def send_welcome(message):
 # Linux tools start
 @bot.message_handler(func=lambda message: message.text == lt_linuxtools)
 def command_linuxtools(message):
-  bot.send_message(tg, text=_("Be careful. Some processes need time. ") + "\U000023F3", reply_markup=markuplinux)
+  bot.send_message(config.tg, text=_("Be careful. Some processes need time. ") + "\U000023F3", reply_markup=markuplinux)
 # /Linux tools start
 
 # Validator ports listen check
@@ -502,34 +492,34 @@ def command_timediff(message):
   try:
     ssvalidator = "ss -tlunp4 | grep -i 'validator'"
     ssvalidator = str(subprocess.check_output(ssvalidator, shell = True,encoding='utf-8'))
-    bot.send_message(tg, text=ssvalidator, reply_markup=markuplinux)
+    bot.send_message(config.tg, text=ssvalidator, reply_markup=markuplinux)
   except:
-    bot.send_message(tg, text=_("Can't check validator port listening"), reply_markup=markuplinux)
+    bot.send_message(config.tg, text=_("Can't check validator port listening"), reply_markup=markuplinux)
 # /Validator ports listen check
 
 # Ping test
 @bot.message_handler(func=lambda message: message.text == lt_ping)
 def command_pingcheck(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    pingcheck = "ping -c 5 " + srvping
+    bot.send_chat_action(config.tg, "typing")
+    pingcheck = "ping -c 5 " + config.srvping
     pingcheck = str(subprocess.check_output(pingcheck, shell = True,encoding='utf-8'))
-    bot.send_message(tg, text=pingcheck, reply_markup=markuplinux)
+    bot.send_message(config.tg, text=pingcheck, reply_markup=markuplinux)
   except:
-    bot.send_message(tg, text=_("Can't execute ping test"), reply_markup=markuplinux)
+    bot.send_message(config.tg, text=_("Can't execute ping test"), reply_markup=markuplinux)
 # /Ping test
 
 # Traceroute test
 @bot.message_handler(func=lambda message: message.text == lt_traceroute)
 def command_traceroutecheck(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    bot.send_chat_action(tg, "typing")
-    traceroutecheck = "traceroute -4 -w 3 " + srvping
+    bot.send_chat_action(config.tg, "typing")
+    bot.send_chat_action(config.tg, "typing")
+    traceroutecheck = "traceroute -4 -w 3 " + config.traceroutetest
     traceroutecheck = str(subprocess.check_output(traceroutecheck, shell = True,encoding='utf-8'))
-    bot.send_message(tg, text=traceroutecheck, reply_markup=markuplinux)
+    bot.send_message(config.tg, text=traceroutecheck, reply_markup=markuplinux)
   except:
-    bot.send_message(tg, text=_("Can't execute tracerote command"), reply_markup=markuplinux)
+    bot.send_message(config.tg, text=_("Can't execute tracerote command"), reply_markup=markuplinux)
 # /Traceroute test
 
 # Top processes
@@ -538,9 +528,9 @@ def command_timediff(message):
   try:
     topps = "ps -eo pid,ppid,user,start,%mem,pcpu,cmd --sort=-%mem | head"
     topps = str(subprocess.check_output(topps, shell = True,encoding='utf-8'))
-    bot.send_message(tg, text=topps, reply_markup=markuplinux)
+    bot.send_message(config.tg, text=topps, reply_markup=markuplinux)
   except:
-    bot.send_message(tg, text=_("Can't get top processes"), reply_markup=markuplinux)
+    bot.send_message(config.tg, text=_("Can't get top processes"), reply_markup=markuplinux)
 # /Top processes
 
 # Server start date/time
@@ -548,16 +538,16 @@ def command_timediff(message):
 def command_srvstart(message):
   try:
     startt = _("System start: ") + str(datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("%b/%d/%Y %H:%M:%S"))
-    bot.send_message(tg, text=startt, reply_markup=markuplinux)
+    bot.send_message(config.tg, text=startt, reply_markup=markuplinux)
   except:
-    bot.send_message(tg, text=_("Can't get system start date"), reply_markup=markuplinux)
+    bot.send_message(config.tg, text=_("Can't get system start date"), reply_markup=markuplinux)
 # /Server start date/time
 
 # Current network load
 @bot.message_handler(func=lambda message: message.text == lt_currntwrkload)
 def command_currntwrkload(message):
   try:
-    bot.send_chat_action(tg, "typing")
+    bot.send_chat_action(config.tg, "typing")
     currentloadn = psutil.net_io_counters()
     bytes_sent = getattr(currentloadn, 'bytes_sent')
     bytes_recv = getattr(currentloadn, 'bytes_recv') 
@@ -569,16 +559,16 @@ def command_currntwrkload(message):
     recvspd = (bytes_recv1-bytes_recv)/1024/1024*8
     sentspd = str((round(sentspd, 2)))
     recvspd = str((round(recvspd, 2)))
-    bot.send_message(tg, text=_("*Current network load\nIncoming:* _") + recvspd + _(" Mb/s_\n*Outgoing:* _") + sentspd + _(" Mb/s_"), parse_mode="Markdown", reply_markup=markuplinux)
+    bot.send_message(config.tg, text=_("*Current network load\nIncoming:* _") + recvspd + _(" Mb/s_\n*Outgoing:* _") + sentspd + _(" Mb/s_"), parse_mode="Markdown", reply_markup=markuplinux)
   except:
-    bot.send_message(tg, text=_("Can't get current network load"), parse_mode="Markdown", reply_markup=markuplinux)
+    bot.send_message(config.tg, text=_("Can't get current network load"), parse_mode="Markdown", reply_markup=markuplinux)
 # /Current network load
 
 # Disk I/O
 @bot.message_handler(func=lambda message: message.text == lt_currntdiskload)
 def command_currdiskload(message):
   try:
-    bot.send_chat_action(tg, "typing")
+    bot.send_chat_action(config.tg, "typing")
     currentloadd = psutil.disk_io_counters()
     bytes_read = getattr(currentloadd, 'read_bytes')
     bytes_writ = getattr(currentloadd, 'write_bytes') 
@@ -590,9 +580,9 @@ def command_currdiskload(message):
     writio = (bytes_writ1-bytes_writ)/1024/1024
     readio = str((round(readio, 2)))
     writio = str((round(writio, 2)))
-    bot.send_message(tg, text=_("*Current disk load\nRead:* _") + readio + _(" MB/s_\n*Write:* _") + writio + _(" MB/s_"), parse_mode="Markdown")
+    bot.send_message(config.tg, text=_("*Current disk load\nRead:* _") + readio + _(" MB/s_\n*Write:* _") + writio + _(" MB/s_"), parse_mode="Markdown")
   except:
-    bot.send_message(tg, text=_("Can't get current disk load"), parse_mode="Markdown")
+    bot.send_message(config.tg, text=_("Can't get current disk load"), parse_mode="Markdown")
 # /Disk I/O
 
 # /Linux tools
@@ -606,307 +596,307 @@ def command_currdiskload(message):
 # Network speed start
 @bot.message_handler(func=lambda message: message.text == lt_spdtst)
 def command_speedtest(message):
-  bot.send_message(tg, text=_("Check server network speed. ") + "\U0001F4E1", reply_markup=markupspeedtest)
+  bot.send_message(config.tg, text=_("Check server network speed. ") + "\U0001F4E1", reply_markup=markupspeedtest)
 # /Network speed start
 
 # Network speed Andorra
 @bot.message_handler(func=lambda message: message.text == lt_andorraspdt)
 def command_testspeed_andorra(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 2530 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 2530 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Andorra
    
 # Network speed Austria
 @bot.message_handler(func=lambda message: message.text == lt_austriaspdt)
 def command_testspeed_austria(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 12390 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 12390 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Austria
 
 # Network speed Belgium
 @bot.message_handler(func=lambda message: message.text == lt_belgiumspdt)
 def command_testspeed_belgium(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 5151 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 5151 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Belgium
 
 # Network speed Bosnia and Herzegovina
 @bot.message_handler(func=lambda message: message.text == lt_bosherzspdt)
 def command_testspeed_bosnia_herzegovina(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 1341 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 1341 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Bosnia and Herzegovina
 
 # Network speed Croatia
 @bot.message_handler(func=lambda message: message.text == lt_croatiaspdt)
 def command_testspeed_croatia(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 2136 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 2136 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Croatia
 
 # Network speed Czech Republic
 @bot.message_handler(func=lambda message: message.text == lt_czechrpspdt)
 def command_testspeed_czech_republic(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 4162 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 4162 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Czech Republic
 
 # Network speed Denmark
 @bot.message_handler(func=lambda message: message.text == lt_denmarkspdt)
 def command_testspeed_denmark(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 9062 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 9062 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Denmark
 
 # Network speed France
 @bot.message_handler(func=lambda message: message.text == lt_francefspdt)
 def command_testspeed_france(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 24386 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 24386 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed France
 
 # Network speed Germany
 @bot.message_handler(func=lambda message: message.text == lt_germanyspdt)
 def command_testspeed_germany(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 28622 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 28622 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Germany
 
 # Network speed Hungary
 @bot.message_handler(func=lambda message: message.text == lt_hungaryspdt)
 def command_testspeed_hungary(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 1697 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 1697 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Hungary
 
 # Network speed Italy
 @bot.message_handler(func=lambda message: message.text == lt_italyflspdt)
 def command_testspeed_italy(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 11842 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 11842 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Italy
 
 # Network speed Liechtenstein
 @bot.message_handler(func=lambda message: message.text == lt_liechtnspdt)
 def command_testspeed_liechtenstein(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 20255 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 20255 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Liechtenstein
 
 # Network speed Luxembourg
 @bot.message_handler(func=lambda message: message.text == lt_luxmbrgspdt)
 def command_testspeed_luxembourg(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 4769 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 4769 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Luxembourg
 
 # Network speed Netherlands
 @bot.message_handler(func=lambda message: message.text == lt_nthlndsspdt)
 def command_testspeed_netherlands(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 20005 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 20005 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Netherlands
 
 # Network speed Poland
 @bot.message_handler(func=lambda message: message.text == lt_polandfspdt)
 def command_testspeed_poland(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 5326 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 5326 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Poland
 
 # Network speed Serbia
 @bot.message_handler(func=lambda message: message.text == lt_serbiafspdt)
 def command_testspeed_serbia(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 3800 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 3800 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Serbia
 
 # Network speed Slovakia
 @bot.message_handler(func=lambda message: message.text == lt_slovakispdt)
 def command_testspeed_slovakia(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 7069 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 7069 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Slovakia
 
 # Network speed Slovenia
 @bot.message_handler(func=lambda message: message.text == lt_slovenispdt)
 def command_testspeed_slovenia(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 3560 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 3560 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Slovenia
 
 # Network speed Spain
 @bot.message_handler(func=lambda message: message.text == lt_spainflspdt)
 def command_testspeed_spain(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 14979 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 14979 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Spain
 
 # Network speed Switzerland
 @bot.message_handler(func=lambda message: message.text == lt_swtzlndspdt)
 def command_testspeed_switzerland(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 24389 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 24389 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed Switzerland
 
 # Network speed United Kingdom
 @bot.message_handler(func=lambda message: message.text == lt_unitedkspdt)
 def command_testspeed_uk(message):
   try:
-    bot.send_chat_action(tg, "typing")
-    testspeedcmd = "python3 " + tontgpath + "/speedtest-cli --share --server 11123 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
+    bot.send_chat_action(config.tg, "typing")
+    testspeedcmd = "python3 " + config.tontgpath + "/speedtest-cli --share --server 11123 | grep -i 'Share results' | awk '{print $3}' | wget -i - -O /tmp/speedtestcheck.png"
     testspeed =str(subprocess.call(testspeedcmd, shell = True,encoding='utf-8'))
-    bot.send_chat_action(tg, "upload_photo")
+    bot.send_chat_action(config.tg, "upload_photo")
     testspeedfile = open('/tmp/speedtestcheck.png', 'rb')
-    bot.send_photo(tg, testspeedfile, reply_markup=markupspeedtest)
+    bot.send_photo(config.tg, testspeedfile, reply_markup=markupspeedtest)
   except:
-    bot.send_message(tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
+    bot.send_message(config.tg, text=_("Network speed test check failed"), reply_markup=markupspeedtest)
 # /Network speed United Kingdom
 
 # Back to linux tools
 @bot.message_handler(func=lambda message: message.text == lt_backlinux)
 def command_backtolinux(message):
-  bot.send_message(tg, text=_("Be careful. Some processes need time ") + " \U000023F3", reply_markup=markuplinux)
+  bot.send_message(config.tg, text=_("Be careful. Some processes need time ") + " \U000023F3", reply_markup=markuplinux)
 # /Back to linux tools
 
 # /Network speed tool
@@ -916,8 +906,15 @@ def command_backtolinux(message):
 # Main menu
 @bot.message_handler(func=lambda message: message.text == lt_mainmenu)
 def command_srvstart(message):
-  bot.send_message(tg, text=_("Start menu"), reply_markup=markup)
+  bot.send_message(config.tg, text=_("Start menu"), reply_markup=markup)
 # /Main menu
+
+# Except proc kill
+def kill(proc_pid):
+  process = psutil.Process(proc_pid)
+  for proc in process.children(recursive=True):
+    proc.kill()
+  process.kill() 
 
 # Alerts
 def AlertsNotifications():
@@ -941,7 +938,7 @@ def AlertsNotifications():
       except subprocess.CalledProcessError as i:
         if i.output != None:
           if alrtprdvnr in q:
-            bot.send_message(tg, text="\U0001F6A8 " + _("Validator node is not running!!! Tap restart validator, to run your node"),  parse_mode="Markdown", reply_markup=markupValidator)
+            bot.send_message(config.tg, text="\U0001F6A8 " + _("Validator node is not running!!! Tap restart validator, to run your node"),  parse_mode="Markdown", reply_markup=markupValidator)
             alrtprdvnr +=5
           else:
             alrtprdvnr +=5
@@ -950,25 +947,25 @@ def AlertsNotifications():
       
       memload = "free -m | grep Mem | awk '/Mem/{used=$3} /Mem/{total=$2} END {printf (used*100)/total}'"
       memload = str(subprocess.check_output(memload, shell = True, encoding='utf-8'))
-      pingc = "ping -c 1 " + srvping + " | tail -1 | awk '{printf $4}' | cut -d '/' -f 1 | tr -d $'\n'"
+      pingc = "ping -c 1 " + config.srvping + " | tail -1 | awk '{printf $4}' | cut -d '/' -f 1 | tr -d $'\n'"
       pingc = str(subprocess.check_output(pingc, shell = True, encoding='utf-8'))
       cpuutilalert = str(psutil.cpu_percent())
       
       # History data
-      with open(os.path.join(tontgpath, "db/ramload.dat"), "a") as i:
+      with open(os.path.join(config.tontgpath, "db/ramload.dat"), "a") as i:
         i.write(str(time.time()) + ";" + memload + "\n")
         i.close()
-      with open(os.path.join(tontgpath, "db/pingcheck.dat"), "a") as i:
+      with open(os.path.join(config.tontgpath, "db/pingcheck.dat"), "a") as i:
         i.write(str(time.time()) + ";" + pingc + "\n")
         i.close()
-      with open(os.path.join(tontgpath, "db/cpuload.dat"), "a") as i:
+      with open(os.path.join(config.tontgpath, "db/cpuload.dat"), "a") as i:
         i.write(str(time.time()) + ";" + cpuutilalert + "\n")
         i.close()
       
       # Notification
       if int(float(memload)) >= 97:
         if alrtprdmem in q:
-          bot.send_message(tg, text="\U0001F6A8 " + _("High memory load!!! ") + memload + _("% I recommend you to restart your *validator* node "),  parse_mode="Markdown")
+          bot.send_message(config.tg, text="\U0001F6A8 " + _("High memory load!!! ") + memload + _("% I recommend you to restart your *validator* node "),  parse_mode="Markdown")
           alrtprdmem +=5
         else:
           alrtprdmem +=5
@@ -977,7 +974,7 @@ def AlertsNotifications():
       
       if int(float(pingc)) >= 15:
         if alrtprdpng in q:
-          bot.send_message(tg,"\U000026A1 " + _("High ping! ") + pingc + " ms")
+          bot.send_message(config.tg,"\U000026A1 " + _("High ping! ") + pingc + " ms")
           alrtprdpng +=5
         else:
           alrtprdpng +=5
@@ -986,7 +983,7 @@ def AlertsNotifications():
       
       if int(float(cpuutilalert)) >= 97:
         if alrtprdcpu in q:
-          bot.send_message(tg,"\U000026A1" + _("High CPU Utilization! ") + cpuutilalert + "%")
+          bot.send_message(config.tg,"\U000026A1" + _("High CPU Utilization! ") + cpuutilalert + "%")
           alrtprdcpu +=5
         else:
           alrtprdcpu +=5
@@ -1002,24 +999,25 @@ def AlertsNotifications():
       hch = 0
       try:
         minstake = 10001
-        wlt = "head -1 " + tk + "*.addr"
+        wlt = "head -1 " + config.tk + "*.addr"
         wlt = str(subprocess.check_output(wlt, shell = True,encoding='utf-8').rstrip())
-        acctoncli = ud + "/tonos-cli account " + wlt + " | grep -i 'balance' | awk '{print $2}'"
+        acctoncli = config.ud + "/tonos-cli account " + wlt + " | grep -i 'balance' | awk '{print $2}'"
         acctoncli = str(subprocess.check_output(acctoncli, shell = True,encoding='utf-8'))
         acctonclibal = str(int(acctoncli) / 1000000000)
         currentstake = "crontab -l | grep -oP 'validator_msig.sh ([0-9]+)' | awk '{print $2}'"
         currentstake = str(subprocess.check_output(currentstake, shell = True,encoding='utf-8').rstrip())
         if int(minstake) < int(float(acctonclibal)) < int(currentstake):
-          bot.send_message(tg,_("Your balance is ") + acctonclibal + " \U0001F48E\n" + _("Please change your stake ") + currentstake + " \U0001F48E " + _("because it is lower than your balance "))
+          bot.send_message(config.tg,_("Your balance is ") + acctonclibal + " \U0001F48E\n" + _("Please change your stake ") + currentstake + " \U0001F48E " + _("because it is lower than your balance "))
       except:
-        bot.send_message(tg,_("Can't fetch your balance"))
+        bot.send_message(config.tg,_("Can't fetch your balance"))
     else:
       hch += 5
 
 def AlertsNotificationst():
+
   td = 0
   t,p,c = 5,2,15
-  #q = [t * p ** (i - 1) for i in range(1, c + 1)]
+  #q = [t * p ** (i - 1) for i in range(1, c + 1)] 
   q = [5,10,15,30,60,90,120,180,320, 640, 1280, 2560, 5120, 10240, 20480, 40960, 81920]
   alrtprdtdf = 5
   while True:
@@ -1029,28 +1027,30 @@ def AlertsNotificationst():
         master, slave = pty.openpty()
         stdout = None
         stderr = None
-        timediffcmd = tf + "scripts/check_node_sync_status.sh | grep TIME_DIFF | awk '{print $4}'"
+        timediffcmd = config.tf + "scripts/check_node_sync_status.sh | grep TIME_DIFF | awk '{print $4}'"
         timediff = subprocess.Popen(timediffcmd, stdin=slave, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, encoding='utf-8', close_fds=True)
         stdout, stderr = timediff.communicate(timeout=2)
         os.close(slave)
         os.close(master)
-        with open(os.path.join(tontgpath, "db/timediff.dat"), "a") as i:
+        with open(os.path.join(config.tontgpath, "db/timediff.dat"), "a") as i:
           i.write(str(time.time()) + ";" + stdout.rstrip() + "\n")
           i.close()
         
         if int(stdout) < -15:
           if alrtprdtdf in q:
-            bot.send_message(tg, text=_("Time Diff is ") + stdout)
+            bot.send_message(config.tg, text=_("Time Diff is ") + stdout)
             alrtprdtdf +=5
           else:
             alrtprdtdf +=5
         if int(stdout) >= -15:
           alrtprdtdf = 5
       except Exception as i:
-        timediff.kill()
+        kill(timediff.pid)
+        os.close(slave)
+        os.close(master)
         if i.output == None:
           if alrtprdtdf in q:
-            bot.send_message(tg, text=_("Time Diff check failed"), reply_markup=markupValidator)
+            bot.send_message(config.tg, text=_("Time Diff check failed"), reply_markup=markupValidator)
             alrtprdtdf +=5
           else:
             alrtprdtdf +=5
