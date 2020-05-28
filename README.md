@@ -1,6 +1,8 @@
 # TONTgBot Readme
 This is telegram bot for Validator server. 
 
+This bot can onlysend messages to your telegram id
+
 Tested on ubuntu 18.04 & python 3.6.8 (To check your python version, put to the terminal # python3 --version )
 
 ## What this bot can do?
