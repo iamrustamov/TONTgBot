@@ -1,10 +1,13 @@
 #!/bin/bash
 
 sudo apt update
+sudo apt -y install traceroute
 sudo apt -y install python3-pip
+
 pip3 install psutil
 pip3 install pyTelegramBotAPI
 pip3 install python-dotenv
+pip3 install matplotlib
 
 echo "Copy files"
 cp -pv /opt/tontgbot/sbot.sh /etc/init.d/tontgbot

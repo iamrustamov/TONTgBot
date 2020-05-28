@@ -1033,9 +1033,7 @@ def AlertsNotificationst():
         os.close(slave)
         os.close(master)
         with open(os.path.join(config.tontgpath, "db/timediff.dat"), "a") as i:
-          i.write(str(time.time()) + ";" + stdout.rstrip() + "\n")
-          i.close()
-        
+          i.write(str(time.time()) + ";" + stdout.rstrip() + "\n")        
         if int(stdout) < -15:
           if alrtprdtdf in q:
             bot.send_message(config.tg, text=_("Time Diff is ") + stdout)
@@ -1054,10 +1052,9 @@ def AlertsNotificationst():
             alrtprdtdf +=5
           else:
             alrtprdtdf +=5
-        
-
-    time.sleep(5)
-    td += 5
+    else:
+      time.sleep(5)
+      td += 5
 
 
 if __name__ == '__main__':
