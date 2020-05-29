@@ -38,7 +38,7 @@ load_dotenv(dotenv_path)
 
 # Log
 logger = telebot.logger
-telebot.logger.setLevel(logging.DEBUG) # Outputs Error messages to console.
+telebot.logger.setLevel(logging.ERROR) # Outputs Error messages to console.
 # /Log
 
 # Menu vars
@@ -233,24 +233,183 @@ def send_welcome(message):
   bot.send_message(config.tg, _("Hello") + "\U0001F44B\n" + _("I'm here to help you with your TON Validatior server ") + " \U0001F9BE\n" + _("Let's choose what you want?"),reply_markup=markup)
 # /Start
 
+# InlineKeyboards
+#CPU
+cpuloadhist = types.InlineKeyboardMarkup()
+cpuloadhist.row(
+types.InlineKeyboardButton(text=_("30m"), callback_data="cpuhist_30m"),
+types.InlineKeyboardButton(text=_("1h"), callback_data="cpuhist_1h"),
+types.InlineKeyboardButton(text=_("3h"), callback_data="cpuhist_3h"),
+types.InlineKeyboardButton(text=_("6h"), callback_data="cpuhist_6h"),
+types.InlineKeyboardButton(text=_("12h"), callback_data="cpuhist_12h"),
+types.InlineKeyboardButton(text=_("1d"), callback_data="cpuhist_1d"),
+types.InlineKeyboardButton(text=_("+"), callback_data="cpuhistmore"))
+
+cpuhistmore = types.InlineKeyboardMarkup()
+cpuhistmore.row(
+types.InlineKeyboardButton(text="\U00002190", callback_data="cpuloadhist"),
+types.InlineKeyboardButton(text=_("3d"), callback_data="cpuhist_3d"),
+types.InlineKeyboardButton(text=_("5d"), callback_data="cpuhist_5d"),
+types.InlineKeyboardButton(text=_("7d"), callback_data="cpuhist_7d"),
+types.InlineKeyboardButton(text=_("14d"), callback_data="cpuhist_14d"),
+types.InlineKeyboardButton(text=_("21d"), callback_data="cpuhist_21d"),
+types.InlineKeyboardButton(text=_("30d"), callback_data="cpuhist_30d"))
+#RAM
+ramloadhist = types.InlineKeyboardMarkup()
+ramloadhist.row(
+types.InlineKeyboardButton(text=_("30m"), callback_data="ramhist_30m"),
+types.InlineKeyboardButton(text=_("1h"), callback_data="ramhist_1h"),
+types.InlineKeyboardButton(text=_("3h"), callback_data="ramhist_3h"),
+types.InlineKeyboardButton(text=_("6h"), callback_data="ramhist_6h"),
+types.InlineKeyboardButton(text=_("12h"), callback_data="ramhist_12h"),
+types.InlineKeyboardButton(text=_("1d"), callback_data="ramhist_1d"),
+types.InlineKeyboardButton(text=_("+"), callback_data="ramhistmore"))
+
+ramhistmore = types.InlineKeyboardMarkup()
+ramhistmore.row(
+types.InlineKeyboardButton(text=_("\U00002190"), callback_data="ramloadhist"),
+types.InlineKeyboardButton(text=_("3d"), callback_data="ramhist_3d"),
+types.InlineKeyboardButton(text=_("5d"), callback_data="ramhist_5d"),
+types.InlineKeyboardButton(text=_("7d"), callback_data="ramhist_7d"),
+types.InlineKeyboardButton(text=_("14d"), callback_data="ramhist_14d"),
+types.InlineKeyboardButton(text=_("21d"), callback_data="ramhist_21d"),
+types.InlineKeyboardButton(text=_("30d"), callback_data="ramhist_30d"))
+
+# Time Diff
+timediffhist = types.InlineKeyboardMarkup()
+timediffhist.row(
+types.InlineKeyboardButton(text=_("30m"), callback_data="timediffhist_30m"),
+types.InlineKeyboardButton(text=_("1h"), callback_data="timediffhist_1h"),
+types.InlineKeyboardButton(text=_("3h"), callback_data="timediffhist_3h"),
+types.InlineKeyboardButton(text=_("6h"), callback_data="timediffhist_6h"),
+types.InlineKeyboardButton(text=_("12h"), callback_data="timediffhist_12h"),
+types.InlineKeyboardButton(text=_("1d"), callback_data="timediffhist_1d"),
+types.InlineKeyboardButton(text=_("+"), callback_data="timediffhistmore"))
+
+timediffhistmore = types.InlineKeyboardMarkup()
+timediffhistmore.row(
+types.InlineKeyboardButton(text=_("\U00002190"), callback_data="timediffhist"),
+types.InlineKeyboardButton(text=_("3d"), callback_data="timediffhist_3d"),
+types.InlineKeyboardButton(text=_("5d"), callback_data="timediffhist_5d"),
+types.InlineKeyboardButton(text=_("7d"), callback_data="timediffhist_7d"),
+types.InlineKeyboardButton(text=_("14d"), callback_data="timediffhist_14d"),
+types.InlineKeyboardButton(text=_("21d"), callback_data="timediffhist_21d"),
+types.InlineKeyboardButton(text=_("30d"), callback_data="timediffhist_30d"))
+
+#PING
+pingcheckhist = types.InlineKeyboardMarkup()
+pingcheckhist.row(
+types.InlineKeyboardButton(text=_("30m"), callback_data="pinghist_30m"),
+types.InlineKeyboardButton(text=_("1h"), callback_data="pinghist_1h"),
+types.InlineKeyboardButton(text=_("3h"), callback_data="pinghist_3h"),
+types.InlineKeyboardButton(text=_("6h"), callback_data="pinghist_6h"),
+types.InlineKeyboardButton(text=_("12h"), callback_data="pinghist_12h"),
+types.InlineKeyboardButton(text=_("1d"), callback_data="pinghist_1d"),
+types.InlineKeyboardButton(text=_("+"), callback_data="pinghistmore"))
+
+pinghistmore = types.InlineKeyboardMarkup()
+pinghistmore.row(
+types.InlineKeyboardButton(text=_("\U00002190"), callback_data="pingcheckhist"),
+types.InlineKeyboardButton(text=_("3d"), callback_data="pinghist_3d"),
+types.InlineKeyboardButton(text=_("5d"), callback_data="pinghist_5d"),
+types.InlineKeyboardButton(text=_("7d"), callback_data="pinghist_7d"),
+types.InlineKeyboardButton(text=_("14d"), callback_data="pinghist_14d"),
+types.InlineKeyboardButton(text=_("21d"), callback_data="pinghist_21d"),
+types.InlineKeyboardButton(text=_("30d"), callback_data="pinghist_30d"))
+
+# /InlineKeyboards
+
+# F
+
+# History load welcome
+def historyget(f,t,lbl,ptitle,poutf,rm):
+  try:
+    bot.send_chat_action(config.tg, "upload_photo")
+    df = pd.read_csv(os.path.join(config.tontgpath, f), sep=";", encoding="utf-8", header=None)
+    df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+    period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(minutes=t)
+    x = df.iloc[:,0].loc[period]
+    y = df.iloc[:,1].loc[period]
+    plt.xlabel('Time') 
+    plt.ylabel(lbl) 
+    plt.title(ptitle)
+    plt.yticks(np.arange(0, 100, step=5))
+    plt.grid(True)
+    plt.ylim(top=100)
+    plt.plot(x, y)
+    plt.gcf().autofmt_xdate()
+    plt.savefig(poutf)
+    plt.clf()
+    load = open(poutf, 'rb')
+    bot.send_photo(config.tg, load, reply_markup=rm)
+  except:
+    bot.send_message(config.tg, text = _("History load error"))
+# /History load welcome
+
+# History load welcome Time Diff
+def historygettd(f,t,lbl,ptitle,poutf,rm):
+  try:
+    bot.send_chat_action(config.tg, "upload_photo")
+    df = pd.read_csv(os.path.join(config.tontgpath, f), sep=";", encoding="utf-8", header=None)
+    df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+    period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(minutes=t)) & (df.iloc[:,1] < 0)
+    x = df.iloc[:,0].loc[period]
+    y = df.iloc[:,1].loc[period]
+    plt.xlabel('Time') 
+    plt.ylabel(lbl) 
+    plt.title(ptitle)
+    plt.grid(True)
+    plt.plot(x, y)
+    plt.gcf().autofmt_xdate()
+    plt.savefig(poutf)
+    plt.clf()
+    load = open(poutf, 'rb')
+    bot.send_photo(config.tg, load, reply_markup=rm)
+  except:
+    bot.send_message(config.tg, text = _("History load error"))
+# /History load welcome Time Diff
+
+# History load welcome
+def historygetping(f,t,lbl,ptitle,poutf,rm):
+  try:
+    bot.send_chat_action(config.tg, "upload_photo")
+    df = pd.read_csv(os.path.join(config.tontgpath, f), sep=";", encoding="utf-8", header=None)
+    df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+    period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(minutes=t)
+    x = df.iloc[:,0].loc[period]
+    y = df.iloc[:,1].loc[period]
+    plt.xlabel('Time') 
+    plt.ylabel(lbl) 
+    plt.title(ptitle)
+    plt.grid(True)
+    plt.plot(x, y)
+    plt.gcf().autofmt_xdate()
+    plt.savefig(poutf)
+    plt.clf()
+    load = open(poutf, 'rb')
+    bot.send_photo(config.tg, load, reply_markup=rm)
+  except:
+    bot.send_message(config.tg, text = _("Ping History load error"))
+# /History load welcome
+
+
+
+
+# F
+
+
+
 # CPU
 @bot.message_handler(func=lambda message: message.text == lt_cpu)
 def command_cpu(message):
   try:
-    cpuloadhist = types.InlineKeyboardMarkup()
-    cpuloadhist.row(
-    types.InlineKeyboardButton(text=_("Last hour"), callback_data="cpuhist_1h"),
-    types.InlineKeyboardButton(text=_("3 h"), callback_data="cpuhist_3h"),
-    types.InlineKeyboardButton(text=_("6 h"), callback_data="cpuhist_6h"),
-    types.InlineKeyboardButton(text=_("12 h"), callback_data="cpuhist_12h"),
-    types.InlineKeyboardButton(text=_("24 h"), callback_data="cpuhist_24h"))
-
     sysload = str(psutil.getloadavg())
     cpuutil = str(psutil.cpu_percent(percpu=True))
     cpu = _("*System load (1,5,15 min):* _") + sysload + _("_\n*CPU utilization %:* _") + cpuutil + "_"
-    bot.send_message(config.tg, text=cpu, parse_mode="Markdown", reply_markup=cpuloadhist)
+    bot.send_message(config.tg, text=cpu, parse_mode="Markdown")
+    historyget("db/cpuload.dat",30,_("Utilization"),_("CPU Utilization"),"/tmp/cpuload.png",cpuloadhist)
   except:
-    bot.send_message(config.tg, text=_("Can't get CPU info"), parse_mode="Markdown", reply_markup=cpuloadhist)
+    bot.send_message(config.tg, text=_("Can't get CPU info"))
 # /CPU
 
 # RAM
@@ -259,9 +418,10 @@ def command_ram(message):
   try:
     ram = _("*RAM, Gb.*\n_Total: ") + str(subprocess.check_output(["free -mh | grep Mem | awk '{print $2}'"], shell = True,encoding='utf-8')) + _("Available: ") + str(subprocess.check_output(["free -mh | grep Mem | awk '{print $7}'"], shell = True,encoding='utf-8')) + _("Used: ") + str(subprocess.check_output(["free -mh | grep Mem | awk '{print $3}'"], shell = True,encoding='utf-8')) + "_"
     swap = _("*SWAP, Gb.*\n_Total: ") + str(subprocess.check_output(["free -mh | grep Swap | awk '{print $2}'"], shell = True,encoding='utf-8')) + _("Available: ") + str(subprocess.check_output(["free -mh | grep Swap | awk '{print $7}'"], shell = True,encoding='utf-8')) + _("Used: ") + str(subprocess.check_output(["free -mh | grep Swap | awk '{print $3}'"], shell = True,encoding='utf-8')) + "_"
-    bot.send_message(config.tg, text=ram + swap, parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=ram + swap, parse_mode="Markdown")
+    historyget("db/ramload.dat",30,_("Utilization"),_("RAM Utilization"),"/tmp/ramload.png",ramloadhist)
   except:
-    bot.send_message(config.tg, text=_("Can't get RAM info"), parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=_("Can't get RAM info"), parse_mode="Markdown")
 # /RAM
 
 # Disk
@@ -319,6 +479,7 @@ def command_timediff(message):
     os.close(slave)
     os.close(master)
     bot.send_message(config.tg, text=_("Time Diff is ") + outs, reply_markup=markupValidator)
+    historygettd("db/timediff.dat",30,_("Difference"),_("Time Diff"),"/tmp/timediff.png",timediffhist)
   except:
     kill(timediff.pid)
     os.close(slave)
@@ -397,12 +558,17 @@ def command_slowlog(message):
 
 @bot.callback_query_handler(func = lambda call: True)
 def inlinekeyboards(call):
-  if call.data == "cpuhist_1h":
+
+# CPU graph
+  if call.data == "cpuloadhist":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=cpuloadhist)
+  if call.data == "cpuhistmore":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=cpuhistmore)
+  if call.data == "cpuhist_30m":
     try:
-      bot.send_chat_action(config.tg, "upload_photo")
       df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
       df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
-      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=1)
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(minutes=30)
       x = df.iloc[:,0].loc[period]
       y = df.iloc[:,1].loc[period]
       plt.xlabel('Time') 
@@ -413,17 +579,38 @@ def inlinekeyboards(call):
       plt.ylim(top=100)
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
-      plt.savefig('/tmp/cpuload_1h.png')
-      cpuload_1h = open('/tmp/cpuload_1h.png', 'rb')
-      bot.send_photo(config.tg, cpuload_1h)
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_1h = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_1h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=1)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_1h = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
       bot.send_message(config.tg, text = _("CPU Utilization history load error"))
   if call.data == "cpuhist_3h":
     try:
-      bot.send_chat_action(config.tg, "upload_photo")
       df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
       df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
-      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=3)
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=3)
       x = df.iloc[:,0].loc[period]
       y = df.iloc[:,1].loc[period]
       plt.xlabel('Time') 
@@ -434,17 +621,17 @@ def inlinekeyboards(call):
       plt.ylim(top=100)
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
-      plt.savefig('/tmp/cpuload_3h.png')
-      cpuload_3h = open('/tmp/cpuload_3h.png', 'rb')
-      bot.send_photo(config.tg, cpuload_3h)
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_3h = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
       bot.send_message(config.tg, text = _("CPU Utilization history load error"))
   if call.data == "cpuhist_6h":
     try:
-      bot.send_chat_action(config.tg, "upload_photo")
       df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
       df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
-      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=6)
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=6)
       x = df.iloc[:,0].loc[period]
       y = df.iloc[:,1].loc[period]
       plt.xlabel('Time') 
@@ -455,17 +642,17 @@ def inlinekeyboards(call):
       plt.ylim(top=100)
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
-      plt.savefig('/tmp/cpuload_6h.png')
-      cpuload_6h = open('/tmp/cpuload_6h.png', 'rb')
-      bot.send_photo(config.tg, cpuload_6h)
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_6h = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
       bot.send_message(config.tg, text = _("CPU Utilization history load error"))
   if call.data == "cpuhist_12h":
     try:
-      bot.send_chat_action(config.tg, "upload_photo")
       df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
       df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
-      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=12)
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=12)
       x = df.iloc[:,0].loc[period]
       y = df.iloc[:,1].loc[period]
       plt.xlabel('Time') 
@@ -476,17 +663,17 @@ def inlinekeyboards(call):
       plt.ylim(top=100)
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
-      plt.savefig('/tmp/cpuload_12h.png')
-      cpuload_12h = open('/tmp/cpuload_12h.png', 'rb')
-      bot.send_photo(config.tg, cpuload_12h)
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_12h = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
       bot.send_message(config.tg, text = _("CPU Utilization history load error"))
-  if call.data == "cpuhist_24h":
+  if call.data == "cpuhist_1d":
     try:
-      bot.send_chat_action(config.tg, "upload_photo")
       df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
       df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
-      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=24)
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=24)
       x = df.iloc[:,0].loc[period]
       y = df.iloc[:,1].loc[period]
       plt.xlabel('Time') 
@@ -497,11 +684,874 @@ def inlinekeyboards(call):
       plt.ylim(top=100)
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
-      plt.savefig('/tmp/cpuload_24h.png')
-      cpuload_24h = open('/tmp/cpuload_24h.png', 'rb')
-      bot.send_photo(config.tg, cpuload_24h)
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_1d = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_1d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
       bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_3d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=72)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_3d = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_3d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_5d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=120)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_5d = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_5d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_7d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=168)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_7d = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_7d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_14d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=336)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_14d = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_14d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_21d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=504)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_21d = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_21d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_30d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=720)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload.png')
+      plt.clf()
+      cpuload_30d = open('/tmp/cpuload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_30d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
+      bot.send
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+# CPU graph
+
+# RAM graph
+  if call.data == "ramloadhist":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=ramloadhist)
+  if call.data == "ramhistmore":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=ramhistmore)
+  if call.data == "ramhist_30m":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(minutes=30)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_30m = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_30m),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_1h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=1)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_1h = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_3h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=3)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_3h = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_6h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=6)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_6h = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_12h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=12)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_12h = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_1d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=24)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_1d = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_1d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_3d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=72)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_3d = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_3d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_5d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=120)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_5d = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_5d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_7d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=168)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_7d = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_7d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_14d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=336)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_14d = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_14d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_21d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=504)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_21d = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_21d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+  if call.data == "ramhist_30d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/ramload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=720)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Load') 
+      plt.title('RAM Load')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/ramload.png')
+      plt.clf()
+      ramload_30d = open('/tmp/ramload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_30d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
+      bot.send
+    except:
+      bot.send_message(config.tg, text = _("RAM Load history load error"))
+# RAM graph
+
+# TimeDiff graph
+  if call.data == "timediffhist":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=timediffhist)
+  if call.data == "timediffhistmore":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=timediffhistmore)
+  if call.data == "timediffhist_30m":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(minutes=30)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_30m = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_30m),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_1h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=1)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_1h = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_3h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=3)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_3h = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_6h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=6)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_6h = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_12h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=12)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_12h = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_1d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=24)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_1d = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_1d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_3d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=72)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_3d = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_3d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_5d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=120)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_5d = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_5d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_7d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=168)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_7d = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_7d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_14d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=336)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_14d = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_14d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_21d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=504)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_21d = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_21d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+  if call.data == "timediffhist_30d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/timediff.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = (df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=720)) & (df.iloc[:,1] < 0)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Difference') 
+      plt.title('Time Diff')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/timediff.png')
+      plt.clf()
+      timediff_30d = open('/tmp/timediff.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_30d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
+      bot.send
+    except:
+      bot.send_message(config.tg, text = _("Time Diff history load error"))
+# TimeDiff graph
+
+# PING graph
+  if call.data == "pingcheckhist":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=pingcheckhist)
+  if call.data == "pinghistmore":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=pinghistmore)
+  if call.data == "pinghist_30m":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(minutes=30)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_30m = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_30m),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_1h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=1)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_1h = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_3h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=3)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_3h = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_6h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=6)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_6h = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_12h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=12)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_12h = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_1d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=24)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_1d = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_1d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_3d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=72)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_3d = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_3d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_5d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=120)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_5d = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_5d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_7d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=168)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_7d = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_7d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_14d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=336)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_14d = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_14d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_21d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=504)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_21d = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_21d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+  if call.data == "pinghist_30d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/pingcheck.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=720)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('ms') 
+      plt.title('Ping Check')
+      plt.grid(True)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/pingcheck.png')
+      plt.clf()
+      pingcheck_30d = open('/tmp/pingcheck.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_30d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
+      bot.send
+    except:
+      bot.send_message(config.tg, text = _("Ping check history load error"))
+# PING graph
+
+# Restart Validator
   if call.data == "res":
     try:
       dorestart = types.InlineKeyboardMarkup()
@@ -621,6 +1671,7 @@ def command_pingcheck(message):
     pingcheck = "ping -c 5 " + config.srvping
     pingcheck = str(subprocess.check_output(pingcheck, shell = True,encoding='utf-8'))
     bot.send_message(config.tg, text=pingcheck, reply_markup=markuplinux)
+    historygetping("db/pingcheck.dat",30,_("ms"),_("Ping test"),"/tmp/pingcheck.png",pingcheckhist)
   except:
     bot.send_message(config.tg, text=_("Can't execute ping test"), reply_markup=markuplinux)
 # /Ping test
@@ -1038,7 +2089,7 @@ def AlertsNotifications():
   hch = 0
   t,p,c = 5,2,15
   #q = [t * p ** (i - 1) for i in range(1, c + 1)]
-  q = [5,10,15,30,60,90,120,180,320, 640, 1280, 2560, 5120, 10240, 20480, 40960, 81920]
+  
   alrtprdvnr = 5
   alrtprdmem = 5
   alrtprdpng = 5
@@ -1053,7 +2104,7 @@ def AlertsNotifications():
         alrtprdvnr =5
       except subprocess.CalledProcessError as i:
         if i.output != None:
-          if alrtprdvnr in q:
+          if alrtprdvnr in config.repeattimealarmnode:
             bot.send_message(config.tg, text="\U0001F6A8 " + _("Validator node is not running!!! Tap restart validator, to run your node"),  parse_mode="Markdown", reply_markup=markupValidator)
             alrtprdvnr +=5
           else:
@@ -1080,7 +2131,7 @@ def AlertsNotifications():
       
       # Notification
       if int(float(memload)) >= 97:
-        if alrtprdmem in q:
+        if alrtprdmem in config.repeattimealarmsrv:
           bot.send_message(config.tg, text="\U0001F6A8 " + _("High memory load!!! ") + memload + _("% I recommend you to restart your *validator* node "),  parse_mode="Markdown")
           alrtprdmem +=5
         else:
@@ -1089,7 +2140,7 @@ def AlertsNotifications():
         alrtprdmem = 5
       
       if int(float(pingc)) >= 15:
-        if alrtprdpng in q:
+        if alrtprdpng in config.repeattimealarmsrv:
           bot.send_message(config.tg,"\U000026A1 " + _("High ping! ") + pingc + " ms")
           alrtprdpng +=5
         else:
@@ -1098,7 +2149,7 @@ def AlertsNotifications():
         alrtprdpng = 5
       
       if int(float(cpuutilalert)) >= 97:
-        if alrtprdcpu in q:
+        if alrtprdcpu in config.repeattimealarmsrv:
           bot.send_message(config.tg,"\U000026A1" + _("High CPU Utilization! ") + cpuutilalert + "%")
           alrtprdcpu +=5
         else:
@@ -1134,7 +2185,7 @@ def AlertsNotificationst():
   td = 0
   t,p,c = 5,2,15
   #q = [t * p ** (i - 1) for i in range(1, c + 1)] 
-  q = [5,10,15,30,60,90,120,180,320, 640, 1280, 2560, 5120, 10240, 20480, 40960, 81920]
+  
   alrtprdtdf = 5
   while True:
     if td == 5:
@@ -1151,7 +2202,7 @@ def AlertsNotificationst():
         with open(os.path.join(config.tontgpath, "db/timediff.dat"), "a") as i:
           i.write(str(int(time.time())) + ";" + stdout.rstrip() + "\n")        
         if int(stdout) < -15:
-          if alrtprdtdf in q:
+          if alrtprdtdf in config.repeattimealarmtd:
             bot.send_message(config.tg, text=_("Time Diff is ") + stdout)
             alrtprdtdf +=5
           else:
@@ -1163,7 +2214,7 @@ def AlertsNotificationst():
         os.close(slave)
         os.close(master)
         if i.output == None:
-          if alrtprdtdf in q:
+          if alrtprdtdf in config.repeattimealarmtd:
             bot.send_message(config.tg, text=_("Time Diff check failed"), reply_markup=markupValidator)
             alrtprdtdf +=5
           else:

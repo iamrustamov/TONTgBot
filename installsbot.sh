@@ -3,6 +3,7 @@
 sudo apt update
 sudo apt -y install traceroute
 sudo apt -y install python3-pip
+sudo apt -y install wget
 
 pip3 install psutil
 pip3 install pyTelegramBotAPI
