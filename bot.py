@@ -16,7 +16,6 @@ import telebot
 from telebot import types
 from telebot import util
 from dotenv import load_dotenv
-from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import gettext 
 
@@ -2130,31 +2129,31 @@ def AlertsNotifications():
         i.close()
       
       # Notification
-      if int(float(memload)) >= 97:
+      if int(float(memload)) >= config.memloadalarm:
         if alrtprdmem in config.repeattimealarmsrv:
           bot.send_message(config.tg, text="\U0001F6A8 " + _("High memory load!!! ") + memload + _("% I recommend you to restart your *validator* node "),  parse_mode="Markdown")
           alrtprdmem +=5
         else:
           alrtprdmem +=5
-      if int(float(memload)) < 97:
+      if int(float(memload)) < config.memloadalarm:
         alrtprdmem = 5
       
-      if int(float(pingc)) >= 15:
+      if int(float(pingc)) >= config.pingcalarm:
         if alrtprdpng in config.repeattimealarmsrv:
           bot.send_message(config.tg,"\U000026A1 " + _("High ping! ") + pingc + " ms")
           alrtprdpng +=5
         else:
           alrtprdpng +=5
-      if int(float(pingc)) < 15:
+      if int(float(pingc)) < config.pingcalarm:
         alrtprdpng = 5
       
-      if int(float(cpuutilalert)) >= 97:
+      if int(float(cpuutilalert)) >= config.cpuutilalarm:
         if alrtprdcpu in config.repeattimealarmsrv:
           bot.send_message(config.tg,"\U000026A1" + _("High CPU Utilization! ") + cpuutilalert + "%")
           alrtprdcpu +=5
         else:
           alrtprdcpu +=5
-      if int(float(cpuutilalert)) < 97:
+      if int(float(cpuutilalert)) < config.cpuutilalarm:
         alrtprdcpu = 5
 
 
@@ -2223,6 +2222,28 @@ def AlertsNotificationst():
       time.sleep(5)
       td += 5
 
+def monitoringnetwork():
+  td = 0
+  while True:
+    if td == 5:
+      td = 0
+      try:
+        currentloadn = psutil.net_io_counters()
+        bytes_sent = getattr(currentloadn, 'bytes_sent')
+        bytes_recv = getattr(currentloadn, 'bytes_recv') 
+        time.sleep(1)
+        currentloadn1 = psutil.net_io_counters()
+        bytes_sent1 = getattr(currentloadn1, 'bytes_sent')
+        bytes_recv1 = getattr(currentloadn1, 'bytes_recv') 
+        sentspd = (bytes_sent1-bytes_sent)
+        recvspd = (bytes_recv1-bytes_recv)
+        with open(os.path.join(config.tontgpath, "db/networkload.dat"), "a") as i:
+          i.write(str(int(time.time())) + ";" + str(int(sentspd)) + ";" + str(int(recvspd)) + "\n") 
+      except:
+        pass      
+    else:
+      time.sleep(4)
+      td += 5
 
 if __name__ == '__main__':
   AlertsNotifications = threading.Thread(target = AlertsNotifications)
@@ -2230,6 +2251,9 @@ if __name__ == '__main__':
 
   AlertsNotificationst = threading.Thread(target = AlertsNotificationst)
   AlertsNotificationst.start()
+
+  monitoringnetwork = threading.Thread(target = monitoringnetwork)
+  monitoringnetwork.start()
 
 
 # /Alerts
