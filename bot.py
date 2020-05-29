@@ -8,12 +8,16 @@ import subprocess
 import tty
 import pty
 import psutil
+import numpy as np
+import pandas as pd
 import logging
 import threading
 import telebot
 from telebot import types
 from telebot import util
 from dotenv import load_dotenv
+from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
 import gettext 
 
 
@@ -233,12 +237,24 @@ def send_welcome(message):
 @bot.message_handler(func=lambda message: message.text == lt_cpu)
 def command_cpu(message):
   try:
+    cpuloadhist = types.InlineKeyboardMarkup()
+    cpuloadhist.row(
+    types.InlineKeyboardButton(text=_("Last hour"), callback_data="cpuhist_1h"),
+    types.InlineKeyboardButton(text=_("3 h"), callback_data="cpuhist_3h"),
+    types.InlineKeyboardButton(text=_("6 h"), callback_data="cpuhist_6h"),
+    types.InlineKeyboardButton(text=_("12 h"), callback_data="cpuhist_12h"),
+    types.InlineKeyboardButton(text=_("24 h"), callback_data="cpuhist_24h"))
+    cpuloadhist.add(cpuloadhist_hour)
+    cpuloadhist.add(cpuloadhist_3hours)
+    cpuloadhist.add(cpuloadhist_6hours)
+    cpuloadhist.add(cpuloadhist_12hours)
+    cpuloadhist.add(cpuloadhist_24hours)
     sysload = str(psutil.getloadavg())
     cpuutil = str(psutil.cpu_percent(percpu=True))
     cpu = _("*System load (1,5,15 min):* _") + sysload + _("_\n*CPU utilization %:* _") + cpuutil + "_"
-    bot.send_message(config.tg, text=cpu, parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=cpu, parse_mode="Markdown", reply_markup=cpuloadhist)
   except:
-    bot.send_message(config.tg, text=_("Can't get CPU info"), parse_mode="Markdown", reply_markup=markup)
+    bot.send_message(config.tg, text=_("Can't get CPU info"), parse_mode="Markdown", reply_markup=cpuloadhist)
 # /CPU
 
 # RAM
@@ -383,9 +399,113 @@ def command_slowlog(message):
 # /Slow logs
 
 
-
 @bot.callback_query_handler(func = lambda call: True)
-def restartvalidnod(call):
+def inlinekeyboards(call):
+  if call.data == "cpuhist_1h":
+    try:
+      bot.send_chat_action(config.tg, "upload_photo")
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=1)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload_1h.png')
+      cpuload_1h = open('/tmp/cpuload_1h.png', 'rb')
+      bot.send_photo(config.tg, cpuload_1h)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_3h":
+    try:
+      bot.send_chat_action(config.tg, "upload_photo")
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=3)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload_3h.png')
+      cpuload_3h = open('/tmp/cpuload_3h.png', 'rb')
+      bot.send_photo(config.tg, cpuload_3h)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_6h":
+    try:
+      bot.send_chat_action(config.tg, "upload_photo")
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=6)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload_6h.png')
+      cpuload_6h = open('/tmp/cpuload_6h.png', 'rb')
+      bot.send_photo(config.tg, cpuload_6h)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_12h":
+    try:
+      bot.send_chat_action(config.tg, "upload_photo")
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=12)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload_12h.png')
+      cpuload_12h = open('/tmp/cpuload_12h.png', 'rb')
+      bot.send_photo(config.tg, cpuload_12h)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
+  if call.data == "cpuhist_24h":
+    try:
+      bot.send_chat_action(config.tg, "upload_photo")
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/cpuload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      period = df.iloc[:,0] >= df.iloc[:,0].max() - pd.Timedelta(hours=24)
+      x = df.iloc[:,0].loc[period]
+      y = df.iloc[:,1].loc[period]
+      plt.xlabel('Time') 
+      plt.ylabel('Utilization') 
+      plt.title('CPU Utilization')
+      plt.yticks(np.arange(0, 100, step=5))
+      plt.grid(True)
+      plt.ylim(top=100)
+      plt.plot(x, y)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/cpuload_24h.png')
+      cpuload_24h = open('/tmp/cpuload_24h.png', 'rb')
+      bot.send_photo(config.tg, cpuload_24h)
+    except:
+      bot.send_message(config.tg, text = _("CPU Utilization history load error"))
   if call.data == "res":
     try:
       dorestart = types.InlineKeyboardMarkup()
@@ -412,8 +532,8 @@ def restartvalidnod(call):
     norestart_reply = types.InlineKeyboardButton(text=_("Declined"),callback_data="no_exit")
     norestart.add(norestart_reply) 
     bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=norestart) 
-@bot.message_handler(func=lambda message: message.text == lt_restartvalidnodee)
 
+@bot.message_handler(func=lambda message: message.text == lt_restartvalidnodee)
 # Restart validator node
 def command_restartvalidator(message):
   try:
@@ -953,13 +1073,13 @@ def AlertsNotifications():
       
       # History data
       with open(os.path.join(config.tontgpath, "db/ramload.dat"), "a") as i:
-        i.write(str(time.time()) + ";" + memload + "\n")
+        i.write(str(int(time.time())) + ";" + memload + "\n")
         i.close()
       with open(os.path.join(config.tontgpath, "db/pingcheck.dat"), "a") as i:
-        i.write(str(time.time()) + ";" + pingc + "\n")
+        i.write(str(int(time.time())) + ";" + pingc + "\n")
         i.close()
       with open(os.path.join(config.tontgpath, "db/cpuload.dat"), "a") as i:
-        i.write(str(time.time()) + ";" + cpuutilalert + "\n")
+        i.write(str(int(time.time())) + ";" + cpuutilalert + "\n")
         i.close()
       
       # Notification
@@ -1033,7 +1153,7 @@ def AlertsNotificationst():
         os.close(slave)
         os.close(master)
         with open(os.path.join(config.tontgpath, "db/timediff.dat"), "a") as i:
-          i.write(str(time.time()) + ";" + stdout.rstrip() + "\n")        
+          i.write(str(int(time.time())) + ";" + stdout.rstrip() + "\n")        
         if int(stdout) < -15:
           if alrtprdtdf in q:
             bot.send_message(config.tg, text=_("Time Diff is ") + stdout)

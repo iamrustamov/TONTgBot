@@ -8,6 +8,8 @@ pip3 install psutil
 pip3 install pyTelegramBotAPI
 pip3 install python-dotenv
 pip3 install matplotlib
+pip3 install numpy
+pip3 install pandas
 
 echo "Copy files"
 cp -pv /opt/tontgbot/sbot.sh /etc/init.d/tontgbot
