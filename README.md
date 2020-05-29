@@ -19,6 +19,13 @@ Tested on ubuntu 18.04 & python 3.6.8 (To check your python version, put to the 
  8. Error log monitoring
  9. Slow log monitoring
 
+#### Historical data (New)
+ 1. CPU Utilization
+ 2. RAM Load (Under development, wil be available soon)
+ 3. Time Diff (Under development, wil be available soon)
+ 4. Disk i/o (Under development, wil be available soon)
+ 5. Network perfomance (Under development, wil be available soon)
+ 6. Ping test (Under development, wil be available soon)
 #### Alert
 
  1. Validator node down
