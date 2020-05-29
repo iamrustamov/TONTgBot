@@ -244,11 +244,7 @@ def command_cpu(message):
     types.InlineKeyboardButton(text=_("6 h"), callback_data="cpuhist_6h"),
     types.InlineKeyboardButton(text=_("12 h"), callback_data="cpuhist_12h"),
     types.InlineKeyboardButton(text=_("24 h"), callback_data="cpuhist_24h"))
-    cpuloadhist.add(cpuloadhist_hour)
-    cpuloadhist.add(cpuloadhist_3hours)
-    cpuloadhist.add(cpuloadhist_6hours)
-    cpuloadhist.add(cpuloadhist_12hours)
-    cpuloadhist.add(cpuloadhist_24hours)
+
     sysload = str(psutil.getloadavg())
     cpuutil = str(psutil.cpu_percent(percpu=True))
     cpu = _("*System load (1,5,15 min):* _") + sysload + _("_\n*CPU utilization %:* _") + cpuutil + "_"
