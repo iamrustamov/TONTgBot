@@ -70,7 +70,7 @@ $ git clone -v https://github.com/anvme/TONTgBot.git /opt/tontgbot && chmod +x /
  3. Open /opt/tontgbot/config.py in any editor and change values in TONTgBot from *Edit starts here* till *Edit ends here*. If you dont know your id(tg value), Just send message to @TONTgIDBot in telegram.
  4. Run 
  ```sh
-$ /bin/bash /opt/tontgbot/installsbot.sh
+$ sudo /bin/bash /opt/tontgbot/installsbot.sh
 ```
  5. Send to bot /start
  6. Enable bot start after reboot
