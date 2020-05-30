@@ -75,7 +75,7 @@ $ /bin/bash /opt/tontgbot/installsbot.sh
  5. Send to bot /start
  6. Enable bot start after reboot
   ```sh
-$ systemctl enable tontgbot.service 
+$ sudo systemctl enable tontgbot.service 
 ```
 ## Available languages *Yes, with google translate
 Change languages=['en'] in bot.py to language, what you need

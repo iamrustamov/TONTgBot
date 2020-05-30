@@ -23,7 +23,7 @@ wget -O /opt/tontgbot/speedtest-cli https://raw.githubusercontent.com/sivel/spee
 chmod +x /opt/tontgbot/speedtest-cli
 echo "Start service and check status"
 echo "service tontgbot start"
-systemctl start tontgbot.service
+sudo systemctl start tontgbot.service
 sleep 5
 echo "service tontgbot status"
-systemctl status tontgbot.service
+sudo systemctl status tontgbot.service
