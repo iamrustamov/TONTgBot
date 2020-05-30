@@ -40,7 +40,6 @@ load_dotenv(dotenv_path)
 # Log
 logger = telebot.logger
 telebot.logger.setLevel(logging.ERROR) # Outputs Error messages to console.
-logging.basicConfig(level=logging.DEBUG,format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 # /Log
 
 # Menu vars
@@ -2111,10 +2110,10 @@ def AlertsNotifications():
             alrtprdvnr +=5
           else:
             alrtprdvnr +=5
-    if hch == 1800:
+    if hch == config.balchecks:
       hch = 0
       try:
-        minstake = 10001
+        minstake = config.minstakes
         wlt = "head -1 " + config.tk + "*.addr"
         wlt = str(subprocess.check_output(wlt, shell = True,encoding='utf-8').rstrip())
         acctoncli = config.ud + "/tonos-cli account " + wlt + " | grep -i 'balance' | awk '{print $2}'"
@@ -2145,20 +2144,20 @@ def AlertsNotificationst():
         master, slave = pty.openpty()
         stdout = None
         stderr = None
-        timediffcmd = config.tf + "scripts/check_node_sync_status.sh | grep TIME_DIFF | awk '{print $4}'"
+        timediffcmd = "sudo /bin/bash " + config.tf + "scripts/check_node_sync_status.sh | grep TIME_DIFF | awk '{print $4}'"
         timediff = subprocess.Popen(timediffcmd, stdin=slave, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, encoding='utf-8', close_fds=True)
         stdout, stderr = timediff.communicate(timeout=2)
         os.close(slave)
         os.close(master)
         with open(os.path.join(config.tontgpath, "db/timediff.dat"), "a") as i:
           i.write(str(int(time.time())) + ";" + stdout.rstrip() + "\n")        
-        if int(stdout) < -15:
+        if int(stdout) < config.timediffalarm:
           if alrtprdtdf in config.repeattimealarmtd:
             bot.send_message(config.tg, text=_("Time Diff is ") + stdout)
             alrtprdtdf +=5
           else:
             alrtprdtdf +=5
-        if int(stdout) >= -15:
+        if int(stdout) >= config.timediffalarm:
           alrtprdtdf = 5
       except Exception as i:
         kill(timediff.pid)
