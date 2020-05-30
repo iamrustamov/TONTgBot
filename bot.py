@@ -38,6 +38,7 @@ load_dotenv(dotenv_path)
 # Log
 logger = telebot.logger
 telebot.logger.setLevel(logging.ERROR) # Outputs Error messages to console.
+logging.basicConfig(level=logging.DEBUG,format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 # /Log
 
 # Menu vars
@@ -2082,7 +2083,7 @@ def kill(proc_pid):
     proc.kill()
   process.kill() 
 
-# Alerts
+# Alerts Validator node
 def AlertsNotifications():
   td = 0
   hch = 0
@@ -2108,59 +2109,6 @@ def AlertsNotifications():
             alrtprdvnr +=5
           else:
             alrtprdvnr +=5
-
-        
-      
-      memload = "free -m | grep Mem | awk '/Mem/{used=$3} /Mem/{total=$2} END {printf (used*100)/total}'"
-      memload = str(subprocess.check_output(memload, shell = True, encoding='utf-8'))
-      pingc = "ping -c 1 " + config.srvping + " | tail -1 | awk '{printf $4}' | cut -d '/' -f 1 | tr -d $'\n'"
-      pingc = str(subprocess.check_output(pingc, shell = True, encoding='utf-8'))
-      cpuutilalert = str(psutil.cpu_percent())
-      
-      # History data
-      with open(os.path.join(config.tontgpath, "db/ramload.dat"), "a") as i:
-        i.write(str(int(time.time())) + ";" + memload + "\n")
-        i.close()
-      with open(os.path.join(config.tontgpath, "db/pingcheck.dat"), "a") as i:
-        i.write(str(int(time.time())) + ";" + pingc + "\n")
-        i.close()
-      with open(os.path.join(config.tontgpath, "db/cpuload.dat"), "a") as i:
-        i.write(str(int(time.time())) + ";" + cpuutilalert + "\n")
-        i.close()
-      
-      # Notification
-      if int(float(memload)) >= config.memloadalarm:
-        if alrtprdmem in config.repeattimealarmsrv:
-          bot.send_message(config.tg, text="\U0001F6A8 " + _("High memory load!!! ") + memload + _("% I recommend you to restart your *validator* node "),  parse_mode="Markdown")
-          alrtprdmem +=5
-        else:
-          alrtprdmem +=5
-      if int(float(memload)) < config.memloadalarm:
-        alrtprdmem = 5
-      
-      if int(float(pingc)) >= config.pingcalarm:
-        if alrtprdpng in config.repeattimealarmsrv:
-          bot.send_message(config.tg,"\U000026A1 " + _("High ping! ") + pingc + " ms")
-          alrtprdpng +=5
-        else:
-          alrtprdpng +=5
-      if int(float(pingc)) < config.pingcalarm:
-        alrtprdpng = 5
-      
-      if int(float(cpuutilalert)) >= config.cpuutilalarm:
-        if alrtprdcpu in config.repeattimealarmsrv:
-          bot.send_message(config.tg,"\U000026A1" + _("High CPU Utilization! ") + cpuutilalert + "%")
-          alrtprdcpu +=5
-        else:
-          alrtprdcpu +=5
-      if int(float(cpuutilalert)) < config.cpuutilalarm:
-        alrtprdcpu = 5
-
-
-    
-        
-    time.sleep(5)
-    td += 5
     if hch == 1800:
       hch = 0
       try:
@@ -2178,6 +2126,8 @@ def AlertsNotifications():
         bot.send_message(config.tg,_("Can't fetch your balance"))
     else:
       hch += 5
+    time.sleep(5)
+    td += 5
 
 def AlertsNotificationst():
 
@@ -2222,6 +2172,59 @@ def AlertsNotificationst():
       time.sleep(5)
       td += 5
 
+# Alerts Validator node
+def AlertsNotificationssys():
+  td = 0
+  alrtprdmem = 5
+  alrtprdpng = 5
+  alrtprdcpu = 5
+  while True:
+    if td == 5:
+      td = 0
+      memload = "free -m | grep Mem | awk '/Mem/{used=$3} /Mem/{total=$2} END {printf (used*100)/total}'"
+      memload = str(subprocess.check_output(memload, shell = True, encoding='utf-8'))
+      pingc = "ping -c 1 " + config.srvping + " | tail -1 | awk '{printf $4}' | cut -d '/' -f 1 | tr -d $'\n'"
+      pingc = str(subprocess.check_output(pingc, shell = True, encoding='utf-8'))
+      cpuutilalert = str(psutil.cpu_percent())
+      
+      # History data
+      with open(os.path.join(config.tontgpath, "db/ramload.dat"), "a") as i:
+        i.write(str(int(time.time())) + ";" + memload + "\n")
+      with open(os.path.join(config.tontgpath, "db/pingcheck.dat"), "a") as i:
+        i.write(str(int(time.time())) + ";" + pingc + "\n")
+      with open(os.path.join(config.tontgpath, "db/cpuload.dat"), "a") as i:
+        i.write(str(int(time.time())) + ";" + cpuutilalert + "\n")
+      
+      # Notification
+      if int(float(memload)) >= config.memloadalarm:
+        if alrtprdmem in config.repeattimealarmsrv:
+          bot.send_message(config.tg, text="\U0001F6A8 " + _("High memory load!!! ") + memload + _("% I recommend you to restart your *validator* node "),  parse_mode="Markdown")
+          alrtprdmem +=5
+        else:
+          alrtprdmem +=5
+      if int(float(memload)) < config.memloadalarm:
+        alrtprdmem = 5
+      
+      if int(float(pingc)) >= config.pingcalarm:
+        if alrtprdpng in config.repeattimealarmsrv:
+          bot.send_message(config.tg,"\U000026A1 " + _("High ping! ") + pingc + " ms")
+          alrtprdpng +=5
+        else:
+          alrtprdpng +=5
+      if int(float(pingc)) < config.pingcalarm:
+        alrtprdpng = 5
+      
+      if int(float(cpuutilalert)) >= config.cpuutilalarm:
+        if alrtprdcpu in config.repeattimealarmsrv:
+          bot.send_message(config.tg,"\U000026A1" + _("High CPU Utilization! ") + cpuutilalert + "%")
+          alrtprdcpu +=5
+        else:
+          alrtprdcpu +=5
+      if int(float(cpuutilalert)) < config.cpuutilalarm:
+        alrtprdcpu = 5
+    time.sleep(5)
+    td += 5
+
 def monitoringnetwork():
   td = 0
   while True:
@@ -2254,6 +2257,9 @@ if __name__ == '__main__':
 
   monitoringnetwork = threading.Thread(target = monitoringnetwork)
   monitoringnetwork.start()
+
+  AlertsNotificationssys = threading.Thread(target = AlertsNotificationssys)
+  AlertsNotificationssys.start()
 
 
 # /Alerts
