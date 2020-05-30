@@ -255,6 +255,8 @@ types.InlineKeyboardButton(text=_("7d"), callback_data="cpuhist_7d"),
 types.InlineKeyboardButton(text=_("14d"), callback_data="cpuhist_14d"),
 types.InlineKeyboardButton(text=_("21d"), callback_data="cpuhist_21d"),
 types.InlineKeyboardButton(text=_("30d"), callback_data="cpuhist_30d"))
+#CPU
+
 #RAM
 ramloadhist = types.InlineKeyboardMarkup()
 ramloadhist.row(
@@ -275,6 +277,7 @@ types.InlineKeyboardButton(text=_("7d"), callback_data="ramhist_7d"),
 types.InlineKeyboardButton(text=_("14d"), callback_data="ramhist_14d"),
 types.InlineKeyboardButton(text=_("21d"), callback_data="ramhist_21d"),
 types.InlineKeyboardButton(text=_("30d"), callback_data="ramhist_30d"))
+#RAM
 
 # Time Diff
 timediffhist = types.InlineKeyboardMarkup()
@@ -296,6 +299,7 @@ types.InlineKeyboardButton(text=_("7d"), callback_data="timediffhist_7d"),
 types.InlineKeyboardButton(text=_("14d"), callback_data="timediffhist_14d"),
 types.InlineKeyboardButton(text=_("21d"), callback_data="timediffhist_21d"),
 types.InlineKeyboardButton(text=_("30d"), callback_data="timediffhist_30d"))
+# Time Diff
 
 #PING
 pingcheckhist = types.InlineKeyboardMarkup()
@@ -317,8 +321,55 @@ types.InlineKeyboardButton(text=_("7d"), callback_data="pinghist_7d"),
 types.InlineKeyboardButton(text=_("14d"), callback_data="pinghist_14d"),
 types.InlineKeyboardButton(text=_("21d"), callback_data="pinghist_21d"),
 types.InlineKeyboardButton(text=_("30d"), callback_data="pinghist_30d"))
+#PING
 
-# /InlineKeyboards
+# Network
+networkcheckhist = types.InlineKeyboardMarkup()
+networkcheckhist.row(
+types.InlineKeyboardButton(text=_("30m"), callback_data="networkhist_30m"),
+types.InlineKeyboardButton(text=_("1h"), callback_data="networkhist_1h"),
+types.InlineKeyboardButton(text=_("3h"), callback_data="networkhist_3h"),
+types.InlineKeyboardButton(text=_("6h"), callback_data="networkhist_6h"),
+types.InlineKeyboardButton(text=_("12h"), callback_data="networkhist_12h"),
+types.InlineKeyboardButton(text=_("1d"), callback_data="networkhist_1d"),
+types.InlineKeyboardButton(text=_("+"), callback_data="networkhistmore"))
+
+networkhistmore = types.InlineKeyboardMarkup()
+networkhistmore.row(
+types.InlineKeyboardButton(text=_("\U00002190"), callback_data="networkcheckhist"),
+types.InlineKeyboardButton(text=_("3d"), callback_data="networkhist_3d"),
+types.InlineKeyboardButton(text=_("5d"), callback_data="networkhist_5d"),
+types.InlineKeyboardButton(text=_("7d"), callback_data="networkhist_7d"),
+types.InlineKeyboardButton(text=_("14d"), callback_data="networkhist_14d"),
+types.InlineKeyboardButton(text=_("21d"), callback_data="networkhist_21d"),
+types.InlineKeyboardButton(text=_("30d"), callback_data="networkhist_30d"))
+# Network
+
+# Disk io
+diskiocheckhist = types.InlineKeyboardMarkup()
+diskiocheckhist.row(
+types.InlineKeyboardButton(text=_("30m"), callback_data="diskiohist_30m"),
+types.InlineKeyboardButton(text=_("1h"), callback_data="diskiohist_1h"),
+types.InlineKeyboardButton(text=_("3h"), callback_data="diskiohist_3h"),
+types.InlineKeyboardButton(text=_("6h"), callback_data="diskiohist_6h"),
+types.InlineKeyboardButton(text=_("12h"), callback_data="diskiohist_12h"),
+types.InlineKeyboardButton(text=_("1d"), callback_data="diskiohist_1d"),
+types.InlineKeyboardButton(text=_("+"), callback_data="diskiohistmore"))
+
+diskiohistmore = types.InlineKeyboardMarkup()
+diskiohistmore.row(
+types.InlineKeyboardButton(text=_("\U00002190"), callback_data="diskiocheckhist"),
+types.InlineKeyboardButton(text=_("3d"), callback_data="diskiohist_3d"),
+types.InlineKeyboardButton(text=_("5d"), callback_data="diskiohist_5d"),
+types.InlineKeyboardButton(text=_("7d"), callback_data="diskiohist_7d"),
+types.InlineKeyboardButton(text=_("14d"), callback_data="diskiohist_14d"),
+types.InlineKeyboardButton(text=_("21d"), callback_data="diskiohist_21d"),
+types.InlineKeyboardButton(text=_("30d"), callback_data="diskiohist_30d"))
+# Disk io
+
+
+
+# InlineKeyboards
 
 # F
 
@@ -340,7 +391,7 @@ def historyget(f,t,lbl,ptitle,poutf,rm):
     plt.plot(x, y)
     plt.gcf().autofmt_xdate()
     plt.savefig(poutf)
-    plt.clf()
+    plt.close() 
     load = open(poutf, 'rb')
     bot.send_photo(config.tg, load, reply_markup=rm)
   except:
@@ -363,14 +414,14 @@ def historygettd(f,t,lbl,ptitle,poutf,rm):
     plt.plot(x, y)
     plt.gcf().autofmt_xdate()
     plt.savefig(poutf)
-    plt.clf()
+    plt.close() 
     load = open(poutf, 'rb')
     bot.send_photo(config.tg, load, reply_markup=rm)
   except:
     bot.send_message(config.tg, text = _("History load error"))
-# /History load welcome Time Diff
+# /History load welcome Time Diff 
 
-# History load welcome
+# History load welcome Ping
 def historygetping(f,t,lbl,ptitle,poutf,rm):
   try:
     bot.send_chat_action(config.tg, "upload_photo")
@@ -386,12 +437,80 @@ def historygetping(f,t,lbl,ptitle,poutf,rm):
     plt.plot(x, y)
     plt.gcf().autofmt_xdate()
     plt.savefig(poutf)
-    plt.clf()
+    plt.close() 
     load = open(poutf, 'rb')
     bot.send_photo(config.tg, load, reply_markup=rm)
   except:
     bot.send_message(config.tg, text = _("Ping History load error"))
-# /History load welcome
+# /History load welcome Ping
+
+# History load welcome Network Bandwidth
+def historygetnb(f,t,lbl,dptitle,uptitle,poutf,rm):
+  try:
+    bot.send_chat_action(config.tg, "upload_photo")
+    df = pd.read_csv(os.path.join(config.tontgpath, f), sep=";", encoding="utf-8", header=None)
+    df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+    df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+    df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+    period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=t)
+    x = df.iloc[:,0].loc[period]
+    y1 = df.iloc[:,1].loc[period]
+    y2 = df.iloc[:,2].loc[period]
+    plt.figure(figsize=[9, 6], dpi=100)
+    plt.subplot(2, 1, 1)
+    plt.xlabel('Time') 
+    plt.ylabel(lbl) 
+    plt.title(dptitle)
+    plt.grid(True)
+    plt.plot(x, y1)
+    plt.subplot(2, 1, 2)
+    plt.xlabel('Time') 
+    plt.ylabel(lbl) 
+    plt.title(uptitle)
+    plt.grid(True)
+    plt.plot(x, y2)
+    plt.gcf().autofmt_xdate()
+    plt.savefig(poutf)
+    plt.close() 
+    load = open(poutf, 'rb')
+    bot.send_photo(config.tg, load, reply_markup=rm)
+  except:
+    bot.send_message(config.tg, text = _("Ping History load error"))
+# /History load welcome Network Bandwidth
+
+# History load welcome Disk I/O
+def historygetdio(f,t,lbl,rptitle,wptitle,poutf,rm):
+  try:
+    bot.send_chat_action(config.tg, "upload_photo")
+    df = pd.read_csv(os.path.join(config.tontgpath, f), sep=";", encoding="utf-8", header=None)
+    df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+    df.iloc[:,1] = df.iloc[:,1]/1024/1024
+    df.iloc[:,2] = df.iloc[:,2]/1024/1024
+    period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=t)
+    x = df.iloc[:,0].loc[period]
+    y1 = df.iloc[:,1].loc[period]
+    y2 = df.iloc[:,2].loc[period]
+    plt.figure(figsize=[9, 6], dpi=100)
+    plt.subplot(2, 1, 1)
+    plt.xlabel('Time') 
+    plt.ylabel(lbl) 
+    plt.title(rptitle)
+    plt.grid(True)
+    plt.plot(x, y1)
+    plt.subplot(2, 1, 2)
+    plt.xlabel('Time') 
+    plt.ylabel(lbl) 
+    plt.title(wptitle)
+    plt.grid(True)
+    plt.plot(x, y2)
+    plt.gcf().autofmt_xdate()
+    plt.savefig(poutf)
+    plt.close() 
+    load = open(poutf, 'rb')
+    bot.send_photo(config.tg, load, reply_markup=rm)
+  except:
+    bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+# /History load welcome Disk I/O
 
 
 
@@ -581,7 +700,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_1h = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
@@ -602,7 +721,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_1h = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
@@ -623,7 +742,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_3h = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
@@ -644,7 +763,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_6h = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
@@ -665,7 +784,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_12h = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
@@ -686,7 +805,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_1d = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_1d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuloadhist)
     except:
@@ -707,7 +826,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_3d = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_3d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
     except:
@@ -728,7 +847,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_5d = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_5d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
     except:
@@ -749,7 +868,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_7d = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_7d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
     except:
@@ -770,7 +889,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_14d = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_14d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
     except:
@@ -791,7 +910,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_21d = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_21d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
     except:
@@ -812,7 +931,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/cpuload.png')
-      plt.clf()
+      plt.close() 
       cpuload_30d = open('/tmp/cpuload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=cpuload_30d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=cpuhistmore)
       bot.send
@@ -841,7 +960,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_30m = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_30m),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
     except:
@@ -862,7 +981,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_1h = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
     except:
@@ -883,7 +1002,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_3h = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
     except:
@@ -904,7 +1023,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_6h = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
     except:
@@ -925,7 +1044,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_12h = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
     except:
@@ -946,7 +1065,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_1d = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_1d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramloadhist)
     except:
@@ -967,7 +1086,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_3d = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_3d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
     except:
@@ -988,7 +1107,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_5d = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_5d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
     except:
@@ -1009,7 +1128,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_7d = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_7d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
     except:
@@ -1030,7 +1149,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_14d = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_14d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
     except:
@@ -1051,7 +1170,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_21d = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_21d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
     except:
@@ -1072,7 +1191,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/ramload.png')
-      plt.clf()
+      plt.close() 
       ramload_30d = open('/tmp/ramload.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=ramload_30d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=ramhistmore)
       bot.send
@@ -1099,7 +1218,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_30m = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_30m),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
     except:
@@ -1118,7 +1237,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_1h = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
     except:
@@ -1137,7 +1256,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_3h = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
     except:
@@ -1156,7 +1275,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_6h = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
     except:
@@ -1175,7 +1294,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_12h = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
     except:
@@ -1194,7 +1313,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_1d = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_1d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhist)
     except:
@@ -1213,7 +1332,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_3d = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_3d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
     except:
@@ -1232,7 +1351,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_5d = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_5d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
     except:
@@ -1251,7 +1370,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_7d = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_7d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
     except:
@@ -1270,7 +1389,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_14d = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_14d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
     except:
@@ -1289,7 +1408,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_21d = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_21d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
     except:
@@ -1308,7 +1427,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/timediff.png')
-      plt.clf()
+      plt.close() 
       timediff_30d = open('/tmp/timediff.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=timediff_30d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=timediffhistmore)
       bot.send
@@ -1335,7 +1454,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_30m = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_30m),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
     except:
@@ -1354,7 +1473,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_1h = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
     except:
@@ -1373,7 +1492,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_3h = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
     except:
@@ -1392,7 +1511,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_6h = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
     except:
@@ -1411,7 +1530,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_12h = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
     except:
@@ -1430,7 +1549,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_1d = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_1d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pingcheckhist)
     except:
@@ -1449,7 +1568,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_3d = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_3d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
     except:
@@ -1468,7 +1587,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_5d = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_5d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
     except:
@@ -1487,7 +1606,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_7d = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_7d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
     except:
@@ -1506,7 +1625,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_14d = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_14d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
     except:
@@ -1525,7 +1644,7 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_21d = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_21d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
     except:
@@ -1544,13 +1663,747 @@ def inlinekeyboards(call):
       plt.plot(x, y)
       plt.gcf().autofmt_xdate()
       plt.savefig('/tmp/pingcheck.png')
-      plt.clf()
+      plt.close() 
       pingcheck_30d = open('/tmp/pingcheck.png', 'rb')
       bot.edit_message_media(media=types.InputMedia(type='photo', media=pingcheck_30d),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=pinghistmore)
       bot.send
     except:
       bot.send_message(config.tg, text = _("Ping check history load error"))
 # PING graph
+
+# Network graph
+  if call.data == "networkcheckhist":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=networkcheckhist)
+  if call.data == "networkhistmore":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=networkhistmore)
+  if call.data == "networkhist_30m":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(minutes=30)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[9, 6], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_1h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_1h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=1)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_1h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_3h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=3)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_3h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_6h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=6)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_6h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_12h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=12)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_12h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_1d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=24)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_24h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_24h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkcheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_3d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=72)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_72h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_72h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_5d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=120)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_120h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_120h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_7d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=168)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_168h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_168h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_14d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=336)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_336h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_336h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_21d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=504)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_504h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_504h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+  if call.data == "networkhist_30d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/networkload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=720)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Download speed')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('Mb/s') 
+      plt.title('Upload speed')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/networkload.png')
+      plt.close() 
+      networkload_720h = open('/tmp/networkload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=networkload_720h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=networkhistmore)
+    except:
+      bot.send_message(config.tg, text = _("Network Utilization history load error"))
+# Network graph
+
+# diskio graph
+  if call.data == "diskiocheckhist":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=diskiocheckhist)
+  if call.data == "diskiohistmore":
+    bot.edit_message_reply_markup(config.tg, message_id=call.message.message_id, reply_markup=diskiohistmore)
+  if call.data == "diskiohist_30m":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(minutes=30)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[9, 6], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_1h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiocheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_1h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=1)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_1h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_1h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiocheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_3h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=3)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_3h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_3h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiocheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_6h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=6)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_6h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_6h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiocheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_12h":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=12)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_12h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_12h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiocheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_1d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=24)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[12, 8], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_24h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_24h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiocheckhist)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_3d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=72)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_72h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_72h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiohistmore)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_5d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=120)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_120h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_120h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiohistmore)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_7d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=168)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_168h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_168h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiohistmore)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_14d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=336)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_336h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_336h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiohistmore)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_21d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=504)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_504h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_504h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiohistmore)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+  if call.data == "diskiohist_30d":
+    try:
+      df = pd.read_csv(os.path.join(config.tontgpath, "db/diskioload.dat"), sep=";", encoding="utf-8", header=None)
+      df.iloc[:,0] = pd.to_datetime(df.iloc[:,0], unit='s')
+      df.iloc[:,1] = df.iloc[:,1]/1024/1024*8
+      df.iloc[:,2] = df.iloc[:,2]/1024/1024*8
+      period = df.iloc[:,0] > df.iloc[:,0].max() - pd.Timedelta(hours=720)
+      x = df.iloc[:,0].loc[period]
+      y1 = df.iloc[:,1].loc[period]
+      y2 = df.iloc[:,2].loc[period]
+      plt.figure(figsize=[18, 9], dpi=100)
+      plt.subplot(2, 1, 1)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Read')
+      plt.grid(True)
+      plt.plot(x, y1)
+      plt.subplot(2, 1, 2)
+      plt.xlabel('Time') 
+      plt.ylabel('MB/s') 
+      plt.title('Write')
+      plt.grid(True)
+      plt.plot(x, y2)
+      plt.gcf().autofmt_xdate()
+      plt.savefig('/tmp/diskioload.png')
+      plt.close() 
+      diskioload_720h = open('/tmp/diskioload.png', 'rb')
+      bot.edit_message_media(media=types.InputMedia(type='photo', media=diskioload_720h),chat_id=call.message.chat.id,message_id=call.message.message_id, reply_markup=diskiohistmore)
+    except:
+      bot.send_message(config.tg, text = _("Disk I/O Utilization history load error"))
+# diskio graph
 
 # Restart Validator
   if call.data == "res":
@@ -1728,6 +2581,7 @@ def command_currntwrkload(message):
     sentspd = str((round(sentspd, 2)))
     recvspd = str((round(recvspd, 2)))
     bot.send_message(config.tg, text=_("*Current network load\nIncoming:* _") + recvspd + _(" Mb/s_\n*Outgoing:* _") + sentspd + _(" Mb/s_"), parse_mode="Markdown", reply_markup=markuplinux)
+    historygetnb("db/networkload.dat",0.5,_("Mb/s"),_("Download"),_("Upload"),"/tmp/networkload.png",networkcheckhist)
   except:
     bot.send_message(config.tg, text=_("Can't get current network load"), parse_mode="Markdown", reply_markup=markuplinux)
 # /Current network load
@@ -1749,6 +2603,7 @@ def command_currdiskload(message):
     readio = str((round(readio, 2)))
     writio = str((round(writio, 2)))
     bot.send_message(config.tg, text=_("*Current disk load\nRead:* _") + readio + _(" MB/s_\n*Write:* _") + writio + _(" MB/s_"), parse_mode="Markdown")
+    historygetdio("db/diskioload.dat",0.5,_("MB/s"),_("Read"),_("Write"),"/tmp/diskioload.png",diskiocheckhist)
   except:
     bot.send_message(config.tg, text=_("Can't get current disk load"), parse_mode="Markdown")
 # /Disk I/O
@@ -2067,7 +2922,7 @@ def command_backtolinux(message):
   bot.send_message(config.tg, text=_("Be careful. Some processes need time ") + " \U000023F3", reply_markup=markuplinux)
 # /Back to linux tools
 
-# /Network speed tool
+# Network speed tool
 #######################################################
 
 
@@ -2249,6 +3104,31 @@ def monitoringnetwork():
       time.sleep(4)
       td += 5
 
+def monitoringdiskio():
+  td = 0
+  while True:
+    if td == 5:
+      td = 0
+      try:
+        currentloadd = psutil.disk_io_counters()
+        bytes_read = getattr(currentloadd, 'read_bytes')
+        bytes_writ = getattr(currentloadd, 'write_bytes') 
+        time.sleep(1)
+        currentloadd1 = psutil.disk_io_counters()
+        bytes_read1 = getattr(currentloadd1, 'read_bytes')
+        bytes_writ1 = getattr(currentloadd1, 'write_bytes') 
+        readio = (bytes_read1-bytes_read)
+        writio = (bytes_writ1-bytes_writ)
+        readio = str((round(readio, 2)))
+        writio = str((round(writio, 2)))
+        with open(os.path.join(config.tontgpath, "db/diskioload.dat"), "a") as i:
+          i.write(str(int(time.time())) + ";" + str(int(readio)) + ";" + str(int(writio)) + "\n") 
+      except:
+        pass
+    else:
+      time.sleep(4)
+      td += 5
+
 if __name__ == '__main__':
   AlertsNotifications = threading.Thread(target = AlertsNotifications)
   AlertsNotifications.start()
@@ -2262,6 +3142,8 @@ if __name__ == '__main__':
   AlertsNotificationssys = threading.Thread(target = AlertsNotificationssys)
   AlertsNotificationssys.start()
 
+  monitoringdiskio = threading.Thread(target = monitoringdiskio)
+  monitoringdiskio.start()
 
 # /Alerts
  

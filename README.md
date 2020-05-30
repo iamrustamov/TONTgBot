@@ -23,9 +23,10 @@ Tested on ubuntu 18.04 & python 3.6.8 (To check your python version, put to the 
  1. CPU Utilization
  2. RAM Load
  3. Time Diff
- 4. Disk i/o (Under development, wil be available soon)
- 5. Network perfomance (Under development, wil be available soon)
- 6. Ping test (Under development, wil be available soon)
+ 4. Disk I/O
+ 5. Network perfomance 
+ 6. Ping test 
+
 #### Alert
 
  1. Validator node down
@@ -42,22 +43,22 @@ Tested on ubuntu 18.04 & python 3.6.8 (To check your python version, put to the 
  2. Check current stake
  3. Update stake
  4. Check wallet balance
- 5. Check current time diff
+ 5. Check current time diff + Historical data
  6. Know your adnl key
  7. Get your error log
  8. Get your slow log
 
 ##### Server
- 1. Check CPU load
- 2. Check RAM load
+ 1. Check CPU load + Historical data
+ 2. Check RAM load + Historical data
  3. Check disk usage
- 4. Check disk i/o
+ 4. Check disk i/o + Historical data
  5. Check validator ports
- 6. Check server ping
+ 6. Check server ping + Historical data
  7. Alalyze server traceroute
  8. Get top processes
  9. Check uptime
- 10. Check network load
+ 10. Check network load + Historical data
  11. Check server network speed to different countries
 
 ## Installation in 6 simple steps
