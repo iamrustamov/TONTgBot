@@ -16,6 +16,8 @@ import telebot
 from telebot import types
 from telebot import util
 from dotenv import load_dotenv
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import gettext 
 
@@ -473,7 +475,7 @@ def command_timediff(message):
     master, slave = pty.openpty()
     stdout = None
     stderr = None
-    timediffcmd = config.tf + "scripts/check_node_sync_status.sh | grep TIME_DIFF | awk '{print $4}'"
+    timediffcmd = "sudo /bin/bash " + config.tf + "scripts/check_node_sync_status.sh | grep TIME_DIFF | awk '{print $4}'"
     timediff = subprocess.Popen(timediffcmd, stdin=slave, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, encoding='utf-8', close_fds=True)
     outs, errs = timediff.communicate(timeout=2)
     os.close(slave)
