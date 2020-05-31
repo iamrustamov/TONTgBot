@@ -59,7 +59,7 @@ Tested on ubuntu 18.04 & python 3.6.8 (To check your python version, put to the 
  8. Get top processes
  9. Check uptime
  10. Check network load + Historical data
- 11. Check server network speed to different countries
+ 11. Check server network speed to different countries (Some countries may not work because speedtest servers may have problems. On Hetzner, many countries didn't work. In the future, I will add much more servers for tests)
 
 ## Installation in 6 simple steps
 
